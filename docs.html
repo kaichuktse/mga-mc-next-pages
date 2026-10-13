@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Documents</title>
+<style>
+  :root {
+    --sf-navy:        #001E5B;
+    --sf-type:        #002775;
+    --sf-container:   #022AC0;
+    --sf-blue:        #066AFE;
+    --sf-cloud:       #00B3FF;
+    --sf-cloud-80:    #90D0FE;
+    --sf-bg:          #CFE9FE;
+    --sf-light-bg:    #EAF5FE;
+    --sf-text:        #002775;
+    --sf-text-weak:   #4A5578;
+    --ext-teal:       #06A59A;  --ext-teal-80: #04E1CB;  --ext-teal-95:   #DEF9F3;
+    --ext-yellow:     #FCC003;  --ext-yellow-70: #E4A201; --ext-yellow-95: #FBF3E0;
+    --ext-pink:       #FF538A;  --ext-pink-40: #B60554;  --ext-pink-95:   #FEF0F3;
+    --ext-violet:     #D17DFE;  --ext-violet-30: #730394; --ext-violet-95: #F9F0FF;
+    --sf-ok:      #2E844A;  --sf-ok-bg:      #EAFCE9;
+    --sf-warn:    #DD7A01;  --sf-warn-bg:    #FFF7E6;
+    --sf-bad:     #BA0517;  --sf-bad-bg:     #FDECEB;
+    --sf-neutral: #94A3B3;  --sf-neutral-bg: #F3F6FA;
+    --client-primary: #E45B10;
+    --client-dark:    #B8480C;
+    --font-heading: 'ITC Avant Garde Gothic Demi','Avant Garde','Century Gothic','Salesforce Sans','Source Sans 3',Arial,sans-serif;
+    --font-body:    'Salesforce Sans','Source Sans 3','Helvetica Neue',Arial,sans-serif;
+    --fs-title:54px; --fs-subtitle:36px; --fs-l1:30px; --fs-cat:26px;
+    --fs-l2:24px; --fs-desc:22px; --fs-body:16px;
+    --space-xs:4px; --space-sm:8px; --space-md:16px;
+    --space-lg:24px; --space-xl:32px; --space-2xl:48px;
+    --radius-sm:4px; --radius-md:8px; --radius-lg:16px;
+    --shadow-brand:2.6px 9.7px 25px rgba(6,106,254,0.15);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font-body);color:var(--sf-text);background:var(--sf-light-bg);-webkit-font-smoothing:antialiased;line-height:1.55;}
+  h1,h2,h3,.sz-stat-num{font-family:var(--font-heading);color:var(--sf-navy);line-height:1.15;}
+  a{color:var(--sf-blue);}
+  :focus-visible{outline:3px solid var(--sf-blue);outline-offset:2px;border-radius:2px;}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important;}}
+  .sz-section{margin:var(--space-2xl) 0;}
+  .sz-section-eyebrow{font-family:var(--font-heading);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:var(--space-xs);}
+  .sz-section-title{font-size:var(--fs-cat);margin-bottom:var(--space-md);}
+  .sz-card{background:#fff;border-radius:var(--radius-md);padding:var(--space-lg);box-shadow:var(--shadow-brand);}
+  .sz-card+.sz-card{margin-top:var(--space-md);}
+  .sz-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:var(--space-md);}
+  .sz-stat{background:#fff;border-radius:var(--radius-md);padding:var(--space-lg) var(--space-md);text-align:center;box-shadow:var(--shadow-brand);}
+  .sz-stat-num{font-size:42px;color:var(--client-primary);}
+  .sz-stat-lbl{font-size:13px;color:var(--sf-text-weak);margin-top:var(--space-xs);}
+  .sz-table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-brand);}
+  .sz-table th{background:var(--sf-container);color:#fff;font-family:var(--font-heading);text-align:left;padding:var(--space-sm) var(--space-md);font-size:14px;}
+  .sz-table td{padding:var(--space-sm) var(--space-md);border-top:1px solid var(--sf-light-bg);font-size:14px;vertical-align:top;}
+  .sz-table tbody tr:nth-child(even){background:var(--sf-light-bg);}
+  .sz-tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;line-height:1.6;}
+  .sz-tag--critical{background:var(--ext-pink-95);color:var(--ext-pink-40);}
+  .sz-tag--high{background:var(--ext-yellow-95);color:var(--ext-yellow-70);}
+  .sz-tag--medium{background:var(--ext-yellow-95);color:var(--ext-yellow-70);}
+  .sz-tag--low{background:var(--ext-teal-95);color:var(--ext-teal);}
+  .sz-tag--info{background:var(--sf-light-bg);color:var(--sf-blue);}
+  .sz-tag--sz-s{background:var(--sf-light-bg);color:var(--sf-blue);}
+  .sz-tag--sz-m{background:#DCEBFF;color:var(--sf-blue);}
+  .sz-tag--sz-l{background:var(--sf-cloud);color:var(--sf-navy);}
+  .sz-tag--sz-xl{background:var(--sf-container);color:#fff;}
+  .sz-tag--ps{background:#F3F0FF;color:#5B21B6;}
+  .sz-tag--wsi{background:#F0FDF4;color:#15803D;}
+  .sz-tag--unknown{background:var(--sf-neutral-bg);color:var(--sf-neutral);}
+  .sz-tag--assumed{background:var(--ext-yellow-95);color:var(--ext-yellow-70);}
+  .sz-tldr{background:var(--sf-light-bg);border-left:4px solid var(--sf-blue);border-radius:var(--radius-sm);padding:var(--space-md) var(--space-lg);margin:var(--space-lg) 0;}
+  .sz-tldr-label{font-family:var(--font-heading);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:var(--space-xs);}
+  .sz-timeline{display:flex;gap:2px;border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow-brand);}
+  .sz-phase{flex:1;padding:var(--space-md);color:#fff;text-align:center;font-size:14px;}
+  .sz-phase:nth-child(1){background:var(--sf-navy);}
+  .sz-phase:nth-child(2){background:var(--sf-container);}
+  .sz-phase:nth-child(3){background:var(--sf-blue);}
+  .sz-phase-name{font-family:var(--font-heading);font-size:15px;}
+  .sz-phase-wks{opacity:.85;font-size:12px;margin-top:2px;}
+  .sz-phase-dates{opacity:.75;font-size:11px;margin-top:2px;}
+  .sz-chips{display:flex;flex-wrap:wrap;gap:var(--space-xs);}
+  .sz-chip{background:var(--sf-light-bg);color:var(--sf-container);border:1px solid var(--sf-cloud-80);border-radius:999px;padding:4px 12px;font-size:13px;}
+  .sz-cta{display:inline-block;background:var(--sf-blue);color:#fff;font-family:var(--font-heading);text-decoration:none;padding:var(--space-sm) var(--space-lg);border-radius:999px;box-shadow:var(--shadow-brand);border:none;cursor:pointer;}
+  .sz-panorama{position:relative;padding:var(--space-2xl) var(--space-xl);text-align:center;border-radius:var(--radius-lg);box-shadow:var(--shadow-brand);overflow:hidden;}
+  .sz-panorama--navy{background:linear-gradient(135deg,var(--sf-navy),var(--sf-container));color:#fff;}
+  .sz-panorama h2{color:inherit;font-size:var(--fs-l1);}
+  .sz-panorama p{color:rgba(255,255,255,.8);margin-top:var(--space-sm);}
+  .shot-btn{position:absolute;top:14px;right:16px;font-size:11px;font-weight:600;color:var(--sf-blue);background:#fff;border:1px solid var(--sf-cloud-80);border-radius:5px;padding:4px 9px;cursor:pointer;z-index:2;}
+  .shot-btn:hover{background:var(--sf-light-bg);}
+  [data-shot]{background:#fff;position:relative;}
+  @media print{.shot-btn,.sz-export{display:none;}}
+  .sz-wrap{max-width:980px;margin:0 auto;padding:var(--space-2xl) var(--space-lg);}
+  .sz-hero{background:linear-gradient(135deg,var(--sf-container),var(--sf-blue));color:#fff;padding:var(--space-2xl) var(--space-lg);}
+  .sz-hero h1{color:#fff;font-size:var(--fs-subtitle);max-width:700px;}
+  .sz-hero p{color:var(--sf-cloud-80);margin-top:var(--space-sm);font-size:16px;}
+  .sz-cobrand{display:flex;align-items:center;gap:var(--space-md);margin-bottom:var(--space-lg);}
+  .sz-cobrand svg{height:30px;width:auto;}
+  .sz-cobrand-x{color:var(--sf-cloud-80);font-size:18px;}
+  .sz-sidebar{position:fixed;top:0;left:0;width:240px;height:100vh;background:#fff;border-right:1px solid var(--sf-cloud-80);overflow-y:auto;z-index:200;display:flex;flex-direction:column;padding-bottom:var(--space-lg);transform:translateX(-100%);transition:transform .22s ease;box-shadow:4px 0 20px rgba(0,30,91,.12);}
+  .sz-sidebar.open{transform:translateX(0);}
+  .sz-sidebar-header{padding:var(--space-md) var(--space-md) var(--space-sm);display:flex;align-items:center;justify-content:space-between;font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--sf-navy);border-bottom:1px solid var(--sf-cloud-80);letter-spacing:.04em;}
+  .sz-sidebar-close{background:none;border:none;cursor:pointer;font-size:18px;color:var(--sf-text-weak);line-height:1;padding:0;}
+  .sz-sidebar-close:hover{color:var(--sf-navy);}
+  .sz-sidebar-group{padding:var(--space-sm) 0;border-bottom:1px solid var(--sf-light-bg);}
+  .sz-sidebar-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sf-text-weak);padding:var(--space-sm) var(--space-md) 4px;}
+  .sz-sidebar-link{display:block;padding:6px var(--space-md);font-size:13px;text-decoration:none;color:var(--sf-container);border-left:3px solid transparent;line-height:1.3;}
+  .sz-sidebar-link:hover{background:var(--sf-light-bg);color:var(--sf-navy);}
+  .sz-sidebar-link.active{background:var(--sf-light-bg);border-left-color:var(--client-primary);color:var(--sf-navy);font-weight:600;}
+  .sz-sidebar-footer{margin-top:auto;padding:var(--space-md);}
+  .sz-sources-btn{display:block;text-align:center;font-size:12px;font-weight:700;padding:5px 14px;border-radius:4px;background:var(--sf-blue);color:#fff !important;text-decoration:none !important;letter-spacing:.02em;}
+  .sz-sources-btn:hover{background:var(--sf-container);}
+  .sz-sidebar-toggle{display:flex;position:fixed;top:14px;left:14px;z-index:300;background:var(--sf-navy);color:#fff;border:none;border-radius:6px;width:36px;height:36px;font-size:18px;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,30,91,.25);}
+  .sz-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:199;}
+  .sz-overlay.active{display:block;}
+  .sz-export{text-align:center;margin:var(--space-2xl) 0 var(--space-lg);}
+  html{scroll-behavior:smooth;}
+  section{scroll-margin-top:16px;}
+  .sz-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);}
+  .sz-risk-row td:first-child{font-weight:600;}
+  .sz-legend{display:flex;flex-wrap:wrap;gap:var(--space-sm);margin-top:var(--space-md);align-items:center;font-size:13px;color:var(--sf-text-weak);}
+  .sz-divider{border:none;border-top:1px solid var(--sf-cloud-80);margin:var(--space-2xl) 0;}
+  @media(max-width:720px){.sz-grid-2{grid-template-columns:1fr;}.sz-timeline{flex-direction:column;}.sz-stats{grid-template-columns:repeat(2,1fr);}}
+</style>
+
+<style>
+  :root{--client-primary:#E6007E;}
+  .sz-stats{grid-template-columns:repeat(auto-fit,minmax(130px,1fr));}
+  .sz-stat-num{white-space:nowrap;font-size:34px;}
+  .sz-tag--confirmed{background:var(--sf-ok-bg);color:var(--sf-ok);}
+  .sz-tag--conditional{background:var(--ext-violet-95);color:var(--ext-violet-30);}
+  .sz-note{font-size:13px;color:var(--sf-text-weak);margin:var(--space-sm) 0 var(--space-md);}
+  .sz-disclaimer{font-size:12px;font-style:italic;color:var(--sf-text-weak);border-left:3px solid var(--sf-cloud-80);padding:4px 12px;margin:var(--space-md) 0;}
+  .sz-banner{background:var(--sf-warn-bg);border-left:4px solid var(--sf-warn);padding:var(--space-sm) var(--space-md);border-radius:var(--radius-sm);font-size:13px;margin:var(--space-md) 0;}
+  .sz-lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-md);}
+  .sz-lane{background:#fff;border-radius:var(--radius-md);padding:var(--space-lg);box-shadow:var(--shadow-brand);border-top:4px solid var(--sf-neutral);}
+  .sz-lane--anchor{border-top-color:var(--sf-ok);}
+  .sz-lane--aug{border-top-color:var(--sf-blue);}
+  .sz-lane--cond{border:2px dashed var(--ext-violet);border-top-width:4px;}
+  .sz-lane h3{font-size:18px;margin-bottom:4px;}
+  .sz-lane .big{font-family:var(--font-heading);font-size:30px;color:var(--sf-container);margin:var(--space-sm) 0 0;}
+  .sz-lane dl{font-size:13px;margin-top:var(--space-sm);}
+  .sz-lane dt{color:var(--sf-text-weak);margin-top:6px;}
+  .sz-lane dd{font-weight:600;margin:0;}
+  .num{text-align:right;white-space:nowrap;}
+  tr.sz-total td{font-weight:700;background:#DCEBFF!important;}
+  .g-wrap{background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-brand);padding:var(--space-md);overflow-x:auto;}
+  .g-row{display:flex;align-items:center;min-height:28px;}
+  .g-lbl{flex:0 0 330px;font-size:12px;padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .g-track{position:relative;flex:1;height:22px;min-width:560px;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(100%/var(--cols,26) - 1px),var(--sf-light-bg) calc(100%/var(--cols,26) - 1px),var(--sf-light-bg) calc(100%/var(--cols,26)));}
+  .g-ticks{background:none;height:18px;}
+  .g-ticks span{position:absolute;transform:translateX(-50%);font-size:10px;color:var(--sf-text-weak);}
+  .g-bar{position:absolute;top:3px;height:16px;border-radius:3px;background:var(--sf-blue);color:#fff;font-size:10px;line-height:16px;text-align:center;overflow:hidden;}
+  .g-bar--mob{background:repeating-linear-gradient(45deg,var(--sf-text-weak) 0 4px,#8892AE 4px 8px);}
+  .g-bar--p2{background:var(--sf-container);}
+  .g-bar--p3{background:var(--sf-navy);}
+  .g-bar--p4{background:var(--ext-violet);}
+  .g-bar--p5{background:var(--sf-ok);}
+  .g-bar--par{background:var(--ext-teal);}
+  .g-legend{font-size:12px;color:var(--sf-text-weak);margin-top:8px;}
+  .g-key{display:inline-block;width:14px;height:10px;border-radius:2px;background:var(--sf-blue);margin:0 4px 0 12px;vertical-align:middle;}
+  .g-key.g-bar--mob,.g-key.g-bar--p2,.g-key.g-bar--p3,.g-key.g-bar--p4,.g-key.g-bar--p5,.g-key.g-bar--par{position:static;}
+  .sz-filter button{font-size:12px;border:1px solid var(--sf-cloud-80);background:#fff;color:var(--sf-container);border-radius:999px;padding:3px 10px;margin:0 4px 6px 0;cursor:pointer;}
+  .sz-filter button.on{background:var(--sf-container);color:#fff;}
+  .sz-doc h1{font-size:26px;margin:var(--space-lg) 0 var(--space-sm);}
+  .sz-doc h2{font-size:20px;margin:var(--space-lg) 0 var(--space-sm);}
+  .sz-doc h3{font-size:16px;margin:var(--space-md) 0 var(--space-xs);}
+  .sz-doc p,.sz-doc li{font-size:14px;margin-bottom:6px;}
+  .sz-doc ul,.sz-doc ol{padding-left:22px;margin-bottom:var(--space-sm);}
+  .sz-doc table{width:100%;border-collapse:collapse;margin:var(--space-sm) 0 var(--space-md);font-size:13px;background:#fff;}
+  .sz-doc th{background:var(--sf-container);color:#fff;text-align:left;padding:6px 10px;}
+  .sz-doc td{padding:6px 10px;border-top:1px solid var(--sf-light-bg);vertical-align:top;}
+  .sz-doc blockquote{border-left:3px solid var(--sf-cloud-80);padding:4px 12px;color:var(--sf-text-weak);margin:var(--space-sm) 0;}
+  .sz-doc code{font-size:12px;background:var(--sf-light-bg);padding:1px 4px;border-radius:3px;}
+  .sz-topnav a{color:#fff;margin-right:var(--space-md);font-size:14px;}
+  @media(max-width:960px){.sz-lanes{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header class="sz-hero">
+  <div class="sz-wrap" style="padding-top:0;padding-bottom:0;">
+    <div class="sz-cobrand"><svg role="img" aria-label="Salesforce" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 205.735 144"><g><path fill-rule="nonzero" fill="rgb(17.7%,62%,87.5%)" d="M85.5 15.8C92.1 8.9 101.4 4.6 111.6 4.6c13.6 0 25.4 7.6 31.7 18.8 5.5-2.4 11.6-3.8 17.9-3.8 24.5 0 44.3 20 44.3 44.7s-19.8 44.7-44.3 44.7c-3 0-5.9-.3-8.7-.9-5.5 9.9-16.1 16.6-28.2 16.6-5.1 0-9.9-1.2-14.2-3.3C104.4 134.6 91.3 143.9 76 143.9c-15.3 0-29.5-10.1-34.7-24.2-2.3.5-4.6.7-7 .7C15.4 120.5 0 105 0 85.8c0-12.8 6.9-24 17.1-30-2.1-4.9-3.2-10.2-3.2-15.9C13.9 17.9 31.7.1 53.8.1c12.9 0 24.4 6.1 31.7 15.7"/></g><path fill="#fff" d="M29.8 74.7c-.1.3.1.4.1.4.4.3.8.5 1.2.7 2.1 1.1 4.1 1.4 6.1 1.4 4.2 0 6.8-2.2 6.8-5.8v-.1c0-3.3-2.9-4.6-5.7-5.4l-.4-.1c-2.1-.7-3.9-1.3-3.9-2.6v-.1c0-1.2 1.1-2.1 2.7-2.1 1.8 0 4 .6 5.4 1.4 0 0 .4.3.5-.1.1-.2.8-2.1.8-2.3.1-.2 0-.4-.1-.5-1.6-1-3.8-1.6-6-1.6h-.4c-3.9 0-6.5 2.3-6.5 5.7v.1c0 3.5 3 4.6 5.8 5.4l.4.1c2 .6 3.8 1.1 3.8 2.6v.1c0 1.3-1.1 2.3-2.9 2.3-.7 0-3-.1-5.4-1.6-.3-.2-.5-.3-.7-.4-.1-.1-.4-.2-.5.2l-.8 2.3zM91.5 74.7c-.1.3.1.4.1.4.4.3.8.5 1.2.7 2.1 1.1 4.1 1.4 6.1 1.4 4.2 0 6.8-2.2 6.8-5.8v-.1c0-3.3-2.9-4.6-5.7-5.4l-.4-.1c-2.1-.7-3.9-1.3-3.9-2.6v-.1c0-1.2 1.1-2.1 2.7-2.1 1.8 0 4 .6 5.4 1.4 0 0 .4.3.5-.1.1-.2.8-2.1.8-2.3.1-.2 0-.4-.1-.5-1.6-1-3.8-1.6-6-1.6h-.4c-3.9 0-6.5 2.3-6.5 5.7v.1c0 3.5 3 4.6 5.8 5.4l.4.1c2 .6 3.8 1.1 3.8 2.6v.1c0 1.3-1.1 2.3-2.9 2.3-.7 0-3-.1-5.4-1.6-.3-.2-.5-.3-.7-.4-.1-.1-.4-.2-.5.2l-.8 2.3zM133.6 67.6c0 2-.4 3.6-1.1 4.8-.7 1.1-1.9 1.7-3.5 1.7s-2.7-.5-3.4-1.7c-.7-1.1-1.1-2.8-1.1-4.8s.4-3.6 1.1-4.8c.7-1.1 1.9-1.7 3.4-1.7s1.7.5 2.5 1.7c.7 1.1 1.1 2.8 1.1 4.8m3.5-3.8c-.3-1.2-.9-2.2-1.6-3.1-.7-.9-1.6-1.6-2.7-2.1-1.1-.5-2.3-.8-3.7-.8s-2.7.3-3.8.8c-1.1.5-2 1.2-2.7 2.1-.7.9-1.2 1.9-1.6 3.1-.3 1.2-.5 2.4-.5 3.8s.2 2.6.5 3.8c.3 1.2.9 2.2 1.6 3.1.7.9 1.6 1.6 2.7 2.1 1.1.5 2.3.8 3.8.8s2.7-.3 3.7-.8c1.1-.5 2-1.2 2.7-2.1.7-.9 1.2-1.9 1.6-3.1.3-1.2.5-2.4.5-3.8s-.2-2.6-.5-3.8M166 73.5c-.1-.3-.5-.2-.5-.2-.5.2-1.1.4-1.6.5-.6.1-1.2.1-1.9.1-1.7 0-3.1-.5-4.1-1.5-1-.9-1.5-2.6-1.5-4.8 0-2 .5-3.5 1.4-4.6.9-1.1 2.2-1.7 3.9-1.7 1.4 0 2.5.2 3.7.6 0 0 .3.1.4-.3.3-.9.5-1.5.8-2.4.1-.3-.1-.4-.2-.4-.5-.2-1.5-.5-2.4-.6-.8-.1-1.6-.2-2.6-.2-1.5 0-2.8.2-3.9.7-1.1.5-2.1 1.2-2.8 2-.8.9-1.3 1.9-1.7 3.1-.4 1.2-.6 2.4-.6 3.8 0 2.9.8 5.3 2.3 7 1.6 1.7 3.9 2.6 7 2.6 1.8 0 3.6-.4 4.9-.9 0 0 .3-.1.2-.4L166 73.5zM172.2 65.7c.2-1.1.5-2.1 1-2.8.7-1.1 1.8-1.7 3.3-1.7s2.3.6 3.1 1.7c.5.7.7 1.7.8 2.8h-8.2zm11.8-2.5c-.3-1.1-1-2.3-1.5-2.8-.8-.8-1.5-1.4-2.3-1.7-.9-.4-2.1-.7-3.3-.7-1.5 0-2.8.3-3.9.8-1.1.5-2 1.2-2.7 2.1-.7.8-1.2 1.9-1.6 3.1-.3 1.2-.5 2.4-.5 3.8s.2 2.6.5 3.8c.4 1.2.9 2.2 1.7 3 .8.9 1.8 1.5 3 2 1.2.4 2.6.7 4.3.7 3.4 0 5.3-.8 6-.2.1-.1.2-.2.1-.5l-.8-2.2c-.1-.3-.4-.2-.4-.2-.9.3-2.1.9-4.9.9-1.8 0-3.2-.5-4.1-1.5-.9-.8-1.3-2.1-1.4-3.9H184s.3 0 .3-.3c.1-.1.5-2.4-.3-5.1z"/><path fill="#fff" d="M76.8 65.7c.2-1.1.5-2.1 1-2.8.7-1.1 1.8-1.7 3.3-1.7s2.3.6 3.1 1.7c.5.7.7 1.7.8 2.8h-8.2zm11.8-2.5c-.3-1.1-1-2.3-1.5-2.8-.8-.8-1.5-1.4-2.3-1.7-1-.4-2.1-.7-3.3-.7-1.5 0-2.8.3-3.9.8-1.1.5-2 1.2-2.7 2.1-.7.8-1.2 1.9-1.6 3.1-.3 1.2-.5 2.4-.5 3.8s.2 2.6.5 3.8c.4 1.2 1 2.2 1.7 3 .8.9 1.7 1.5 2.9 2 1.2.4 2.6.7 4.3.7 3.4 0 5.2-.8 6-.2.1-.1.2-.2.1-.5l-.8-2.2c-.1-.3-.4-.2-.4-.2-.9.3-2.1.9-4.9.9-1.8 0-3.2-.5-4.1-1.5-.9-.8-1.3-2.1-1.4-3.9h11.9s.3 0 .3-.3c.1-.1.5-2.4-.3-5.1z"/><path fill="#fff" d="M51 73.4c-.5-.4-.5-.5-.6-.7-.2-.4-.3-.9-.3-1.6 0-1 .3-1.8 1.1-2.3 0 0 1-.9 3.4-.9 1.7 0 3.3.3 3.3.3v5.4s-1.5.3-3.2.4c-2.4.1-3.5-.6-3.5-.6zm4.8-8.3c-.5 0-1.1-.1-1.9-.1-.9 0-1.9.1-2.8.4-.9.2-1.7.6-2.4 1.1-.7.5-1.3 1.2-1.7 2-.4.8-.6 1.7-.6 2.8s.2 2 .5 2.7c.4.8.9 1.4 1.6 1.9.7.5 1.5.8 2.4 1 1 .2 2 .3 3.2.3 1.2 0 2.4-.1 3.6-.3 1.2-.2 2.6-.5 2.9-.6.4-.1.8-.2.8-.2.3-.1.3-.4.3-.4V64.8c0-2.4-.7-4.1-1.9-5.2-1.3-1.1-3.1-1.6-5.5-1.6-.9 0-2.3.1-3.1.3 0 0-2.6.5-3.7 1.3 0 0-.2.1-.1.5l.8 2.3c.1.3.4.2.4.2s.1 0 .2-.1c2.3-1.2 5.2-1.2 5.2-1.2 1.3 0 2.3.3 2.9.8.6.5 1 1.2 1 2.8v.5c-1-.2-1.9-.2-1.9-.2z"/><path fill="#fff" d="M151.8 58.9c.1-.3-.1-.4-.1-.4-.2-.1-1.2-.3-2-.4-1.5-.1-2.3.1-3.1.5-.7.3-1.6.9-2 1.5V58.7c0-.2-.2-.4-.4-.4h-3v17.8c0 .2.2.4.4.4h3.2c.2 0 .4-.2.4-.4V67.6c0-1.2.1-2.4.4-3.1.2-.7.6-1.3 1-1.7.4-.4.9-.7 1.4-.9.5-.2 1.1-.2 1.5-.2.6 0 1.3.2 1.3.2.2 0 .4-.1.5-.4l1.5-3.6zM122.5 50.7c-.4-.1-.7-.2-1.2-.3-.5-.1-1-.1-1.6-.1-2.1 0-3.9.6-5 1.8-1.2 1.2-2 3-2.4 5.4l-.1.8h-2.7c0 0-.3 0-.4.4l-.4 2.5c0 .2.1.4.4.4h2.6L109 76.4c-.2 1.2-.5 2.2-.7 2.9-.3.8-.5 1.3-.8 1.7-.3.4-.6.7-1 .8-.4.1-.9.2-1.4.2-.3 0-.6 0-.9-.1-.3-.1-.4-.1-.6-.2 0 0-.3-.1-.4.2l-.9 2.4c-.1.2 0 .4.1.5.4.1.6.2 1.1.3.6.2 1.2.2 1.7.2 1.1 0 2.1-.2 2.9-.5.8-.3 1.6-.8 2.2-1.6.7-.8 1.1-1.5 1.5-2.6.4-1 .7-2.4 1-4l2.7-15.1h3.9c0 0 .3 0 .4-.4l.4-2.5c0-.2-.1-.4-.4-.4h-3.8c0-.1.2-1.4.6-2.7.2-.5.5-1 .8-1.3.3-.3.6-.5 1-.6.4-.1.8-.2 1.3-.2.4 0 .7.1 1 .1.4.1.5.1.6.1.4.1.5 0 .5-.2l.9-2.5c.1-.3-.1-.4-.2-.5z"/><path fill="#fff" d="M69.3 76.5c0 .2-.2.4-.4.4h-3.2c-.2 0-.4-.2-.4-.4V51h3.6c.2 0 .4.2.4.4v25.1z"/></svg><span class="sz-cobrand-x">×</span>
+      <span style="font-family:var(--font-heading);font-size:20px;color:#fff;letter-spacing:0.06em;">MGA ENTERTAINMENT</span></div>
+    <h1>Documents</h1>
+    <p>Technical summary · Solution · Delivery plan · AI delivery efficiency · Architecture decisions</p>
+    <p class="sz-topnav" style="margin-top:var(--space-md);"><a href="index.html">Overview</a><a href="scope.html">Full scope</a><a href="docs.html">Documents</a></p>
+  </div>
+</header>
+<button class="sz-sidebar-toggle" aria-label="Open navigation" onclick="document.querySelector('.sz-sidebar').classList.add('open');document.getElementById('sz-overlay').classList.add('active');">&#9776;</button>
+<div class="sz-overlay" id="sz-overlay" onclick="document.querySelector('.sz-sidebar').classList.remove('open');document.getElementById('sz-overlay').classList.remove('active');"></div>
+<nav class="sz-sidebar" aria-label="Section navigation">
+  <div class="sz-sidebar-header"><span>MGA · MC Next</span>
+    <button class="sz-sidebar-close" aria-label="Close navigation" onclick="document.querySelector('.sz-sidebar').classList.remove('open');document.getElementById('sz-overlay').classList.remove('active');">&#215;</button></div>
+  <div class="sz-sidebar-group"><div class="sz-sidebar-label">Documents</div><a href="#exec" class="sz-sidebar-link">Technical summary</a><a href="#solution" class="sz-sidebar-link">Solution</a><a href="#delivery" class="sz-sidebar-link">Delivery plan</a><a href="#efficiency" class="sz-sidebar-link">AI delivery efficiency</a><a href="#adrs" class="sz-sidebar-link">Architecture decisions</a></div><div class="sz-sidebar-group"><div class="sz-sidebar-label">More</div><a href="index.html" class="sz-sidebar-link">Overview</a><a href="scope.html" class="sz-sidebar-link">Full scope</a></div>
+</nav>
+<main class="sz-wrap">
+<section id="exec" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Technical summary</h2><div class="sz-doc"><h1>MGA Entertainment: Technical Summary</h1>
+<p><strong>Klaviyo to Marketing Cloud Next and Data 360 for MGA Shop, Bratz and Little Tikes</strong> · 2026-10-13 · Audience: architects and delivery leads · Draft for review</p>
+<h2>At a Glance</h2>
+<ul>
+<li><strong>Current state:</strong> three Klaviyo accounts, one per Shopify storefront, with no shared customer view, separate opt-ins, and app data in Snapser that marketing can't reach.</li>
+<li><strong>Target:</strong> one Marketing Cloud Next org on one Data 360 data space, with a single parent profile across three stores and the apps.</li>
+<li><strong>Value drivers:</strong> cross-brand customer visibility, one opt-in across the brand umbrella, and cross-sell across brands, within brands, and between physical toys and digital apps.</li>
+<li><strong>Biggest risk:</strong> the Shopify Connector is in beta. The real-time abandonment flows depend on MGA's web team deploying the Interactions SDK during the holiday code freeze.</li>
+<li><strong>First step:</strong> a 3-week Phase 0 design phase to settle four open design decisions, identity rules and partner file specifications, submit SMS short-code registration, and get MGA's marketing users through self-paced platform learning.</li>
+</ul>
+<hr />
+<h2>Overview</h2>
+<p>MGA is consolidating three brand-level Klaviyo accounts into one Marketing Cloud Next org, so it can recognize one parent across MGA Shop, Bratz.com, LittleTikes.com and the Snapser apps. The build rebuilds 38 of the 39 Klaviyo flows, about 20 distinct patterns. It also adds a consent model that meets both COPPA and GDPR, ingests Shopify and partner data into Data 360, and migrates Klaviyo and Yotpo data once. MGA's target go-live is March 1, 2027. Klaviyo can run month to month if launch moves past that date.</p>
+<h2>Scope</h2>
+<p>Sixteen epics in four groups:</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Epics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data foundation and integration</td>
+<td>E01 Data 360 foundation and unified profile · E02 Shopify commerce integration · E03 Partner file integrations (Snapser, Yotpo, Bazaarvoice, ERP) · E04 Klaviyo contacts, suppressions and Yotpo migration</td>
+</tr>
+<tr>
+<td>Consent and channels</td>
+<td>E05 Consent, preference center and privacy · E17 Klaviyo consent import · E06 Email deliverability · E16 SMS short-code registration · E10 Brand templates</td>
+</tr>
+<tr>
+<td>Engagement</td>
+<td>E07 Behavioral and commerce triggers · E08 Welcome and lifecycle · E09 Loyalty · E11 Segmentation and activation · E12 Agentforce for Marketing</td>
+</tr>
+<tr>
+<td>Go-live</td>
+<td>E14 Testing and cutover · E15 Two weeks of hypercare and configuration knowledge transfer</td>
+</tr>
+</tbody>
+</table>
+<p>There is no separate training epic. MGA's users take self-paced learning in Phase 0, and Salesforce hands over the configuration in E15.</p>
+<p><strong>Out of scope:</strong> Klaviyo engagement history; building ad-hoc and launch campaigns (MGA's marketing team builds these on delivered templates and segments); a move to TYB for loyalty; Circana; lawful-transfer paperwork for EU data.</p>
+<p><strong>MGA owns:</strong> change management and experience design; all copy and imagery (delivery recreates the current Klaviyo layouts); storefront sign-up forms in Shopify; SDK deployment on the storefronts; the Azure landing zone and the vendor file drops into it.</p>
+<h2>Solution Highlights</h2>
+<p><strong>Org model.</strong> One business unit and one data space, with the business-unit feature off. In Marketing Cloud Next each business unit maps one-to-one to a walled-off data space, so per-brand units would block the cross-brand profile and the shared opt-in. Brands are separated by sender profile, sending domain, SMS short code, master templates, subscription and a brand attribute. MGA accepts no data isolation between brands and one shared sending-IP reputation.</p>
+<p><strong>Identity.</strong> The default Data 360 ruleset (normalized email, device to known), plus match rules on the Shopify customer ID and Snapser app ID so that app-only and SMS-only parents join the profile. Children are never contacts. A child's age band and birthday sit on the parent's profile, which replaces the four Little Tikes tagging automations.</p>
+<p><strong>Integration.</strong> All native connectors, with no middleware:
+- Shopify Connector, one connection per store, for customers, orders, history, catalog and inventory. Shopify is the catalog master.
+- Interactions SDK on the three storefronts for real-time browse, cart and checkout events. These SDK events are the only source for the abandonment triggers, which prevents duplicate sends from the connector's batch abandonment data.
+- Azure Blob Storage connector for scheduled files from Snapser (parental-consent records only), Yotpo, Bazaarvoice and a named list of ERP fields.
+- Native activations: six paid-media audiences (TikTok and Instagram per brand), plus engagement and unsubscribe data to Azure.</p>
+<p><strong>Consent.</strong> Six brand-level subscriptions (three brands × email and SMS). The umbrella sign-up subscribes a parent to all three, and the preference center offers per-brand control and an unsubscribe-from-all. Every triggered flow runs the send-time consent check except loyalty redemption confirmation; all SMS is checked. The Consent Audit Trail records GDPR evidence, and Privacy Requests handle erasure and access across the org and Data 360.</p>
+<p><strong>Migration load order.</strong> Contacts first (E04), then Klaviyo consent (E17), then Shopify consent going forward. The consent import doesn't create contacts and skips rows older than the stored value, so loading Shopify first would override Klaviyo consent. Each consent file covers one channel, subscription and status, so files multiply by brand and channel.</p>
+<p><strong>Flows.</strong> About 20 patterns, each built once with brand variants. Abandonment, price drop, back-in-stock and low inventory use the native commerce triggers. Welcome flows are event-triggered. Lifecycle and date-based loyalty flows run on segment-based audience flows. Event-driven loyalty flows run on the Yotpo file data, with end-to-end latency set by the file drop interval.</p>
+<p><strong>Agentforce.</strong> The standard campaign-from-brief action and Einstein segment creation, configured with brand guardrails. There are no custom agents.</p>
+<p><strong>Environments.</strong> A Developer Pro sandbox for build and a Partial Copy sandbox for user acceptance testing, with the email blackhole on. Data 360 metadata moves to production in a DevOps Data Kit, with objects deployed before the flows that use them. Connector credentials are re-authorized after each deployment.</p>
+<h2>Implementation Approach</h2>
+<p><strong>Planned program duration: 26 weeks</strong>, from Phase 0 through hypercare exit, including MGA review and sign-off time. The plan sits inside a benchmark-based range of 14–30 weeks. It lands after MGA's March 1, 2027 target, so Klaviyo runs month to month until cutover.</p>
+<blockquote>
+<p><em>This figure is benchmark-based, derived from the AI model's training data and general delivery patterns (not Salesforce-validated) — not a commitment. Final figures are confirmed through the applicable commercial agreement.</em></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0. Design (weeks 1–3)</td>
+<td>Open decisions, identity rules, partner file specs, flow specs, copy hand-off plan; SMS registration submitted (E16); MGA self-paced learning</td>
+</tr>
+<tr>
+<td>1. Foundation (weeks 4–7)</td>
+<td>E01 profile, E10 templates</td>
+</tr>
+<tr>
+<td>2. Data in and consent (weeks 8–14)</td>
+<td>E02 Shopify and SDK, E03 partner files, E04 contacts and suppressions; then E05 consent and preference center; then E17 Klaviyo consent import</td>
+</tr>
+<tr>
+<td>3. Deliverability and journeys (weeks 15–22)</td>
+<td>E06 domain authentication and 6-week warm-up, with E07–E09 flows alongside; E11 segments and activations, then E12 Agentforce</td>
+</tr>
+<tr>
+<td>4. Testing and cutover (weeks 23–24)</td>
+<td>E14 system testing and user acceptance testing, final loads, Klaviyo switch-off</td>
+</tr>
+<tr>
+<td>5. Hypercare and knowledge transfer (weeks 25–26)</td>
+<td>E15 monitoring, triage, deliverability watch, configuration knowledge transfer, handover</td>
+</tr>
+<tr>
+<td>Parallel (weeks 1–12)</td>
+<td>E16 carrier approval of 3 SMS short codes, needed before E07–E09 start</td>
+</tr>
+</tbody>
+</table>
+<p>Carriers set the pace of SMS approval and mailbox providers set the pace of warm-up, so neither shortens in any delivery model.</p>
+<p><strong>Critical path:</strong> E01 → E02 / E03 / E04 → E05 → E06 (with E07–E09) → E14 → E15. Three epics carry the most schedule risk:
+- <strong>E02:</strong> a fallback from the beta connector to a custom build.
+- <strong>E01:</strong> unknown identity volumes.
+- <strong>E06:</strong> warm-up can't start until consent is done, and it needs MGA to build the warm-up emails.</p>
+<p>Month-to-month Klaviyo makes either an all-brand or a brand-by-brand cutover workable. MGA chooses in Phase 0.</p>
+<h2>Effort Summary</h2>
+<p>Relative complexity across the 16 epics: five large (E01, E02, E05, E07, E14), five medium, five small and one extra-small (E16 SMS registration), none extra-large. The heaviest work is the data foundation, the Shopify integration, consent and the commerce-triggered flows.</p>
+<p><strong>Disciplines:</strong>
+- Solution architecture for Marketing Cloud Next and the consent model
+- Technical architecture for Data 360 identity, integration and migration
+- Data 360 and Marketing Cloud Next configuration
+- Template development
+- Deliverability
+- Quality assurance across three brands and two channels</p>
+<p>The team shape is a senior onshore architecture core with an offshore build and test team, plus part-time deliverability.</p>
+<h2>Risks and Mitigations</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Impact</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shopify Connector still in beta at go-live</td>
+<td>Production runs under beta terms, or E02 grows to a custom Ingestion API build</td>
+<td>MGA legal and IT set a fallback decision date in Phase 0</td>
+</tr>
+<tr>
+<td>SDK deployment during the holiday code freeze</td>
+<td>Abandonment flows can't be tested</td>
+<td>Freeze dates confirmed in Phase 0; SDK deployed before the freeze or planned around it</td>
+</tr>
+<tr>
+<td>Copy and imagery late</td>
+<td>Flow build and testing stall</td>
+<td>Hand-off dates per flow wave agreed in Phase 0</td>
+</tr>
+<tr>
+<td>Partner files not produced by MGA or vendors</td>
+<td>Extract builds become change orders</td>
+<td>File specs and owners confirmed in Phase 0</td>
+</tr>
+<tr>
+<td>Paid-media consent undefined</td>
+<td>Activations can't go live</td>
+<td>MGA privacy decides whether advertising consent is its own purpose</td>
+</tr>
+<tr>
+<td>Shared sending-IP reputation</td>
+<td>One brand's list quality affects all three</td>
+<td>Suppressions imported before warm-up; per-domain warm-up plan</td>
+</tr>
+<tr>
+<td>Migration load order</td>
+<td>"Klaviyo wins" breaks silently</td>
+<td>Fixed load sequence with reconciliation sign-off</td>
+</tr>
+<tr>
+<td>SMS short-code approval late</td>
+<td>E07–E09 can't start</td>
+<td>Registration submitted in week 1, about two weeks of slack before Phase 3</td>
+</tr>
+<tr>
+<td>MGA not ready to build warm-up emails</td>
+<td>E06 slips, and go-live with it</td>
+<td>Self-paced learning in Phase 0; a named content owner before Phase 3</td>
+</tr>
+</tbody>
+</table>
+<h2>Assumptions and Confidence</h2>
+<p>41% of epics and size estimates are confirmed, and 59% rest on stated assumptions. That's expected before Phase 0. Each assumed size has a written rationale, and eight epics have a named larger size if their assumption breaks. The load-bearing assumptions:
+- US hosting for EU data.
+- "GSRM (EU)" means GDPR.
+- MGA owns the Azure landing zone and file drops.
+- Little Tikes order confirmation stays in Shopify.
+- Yotpo remains the loyalty platform.</p>
+<p><strong>Four design decisions are open and decided in Phase 0:</strong>
+- how a Shopify checkout opt-in becomes subscription consent after cutover;
+- the advertising-consent rule for paid media;
+- the back-in-stock pattern (native trigger or an explicit notify-me list);
+- how bulk suppression lists are held in Marketing Cloud Next.</p>
+<h2>Next Steps</h2>
+<ol>
+<li><strong>Confirm Phase 0 participants.</strong> MGA names a product owner, privacy counsel, a data steward and the web team owner for the SDK.</li>
+<li><strong>Send pre-Phase 0 data requests.</strong> Record counts per Klaviyo account, a consent export sample with source and timestamp, identifiers per source, and holiday freeze dates.</li>
+<li><strong>Set the Shopify Connector fallback date</strong> with MGA legal and IT.</li>
+<li><strong>Submit SMS short-code registration</strong> in the first week of Phase 0, and start MGA's self-paced learning.</li>
+<li><strong>Lock copy and warm-up email hand-off dates</strong> per flow wave before Phase 1 ends.</li>
+</ol></div></section><section id="solution" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Solution</h2><div class="sz-doc"><h1>MGA Entertainment: Solution</h1>
+<p><strong>Marketing Cloud Next and Data 360 for MGA Shop, Bratz and Little Tikes</strong> · 2026-10-13 · Status: draft for solution-lead review</p>
+<hr />
+<h2>What we're building</h2>
+<p>MGA moves three Klaviyo accounts onto one Marketing Cloud Next org on one Data 360 data space. The result:
+- <strong>One profile for each parent</strong> across the three Shopify stores and the Snapser apps.
+- <strong>One sign-up</strong> that subscribes a parent to all brands, with brand-level preferences and an unsubscribe-from-all.
+- <strong>38 rebuilt flows</strong>, built as shared patterns with brand variants.</p>
+<p>Shopify is the commerce and catalog master. Partner systems deliver files to an Azure landing zone that MGA owns. Delivery recreates the existing email layouts, and MGA supplies all copy and imagery.</p>
+<p><strong>Phase 0 is a 3-week design phase</strong> (committed by the solution lead) that settles the open decisions before build. It covers:
+- consent and subscription design
+- identity rules
+- the Shopify catalog mapping and the ERP field list
+- partner file specifications
+- flow specifications and the copy hand-off plan
+- Klaviyo contract and code-freeze dates
+- the Interactions SDK deployment owner and dates</p>
+<p>Two things also start in Phase 0. SMS short-code registration is submitted (E16), and MGA's marketing users complete self-paced Marketing Cloud Next learning so they're ready to build the warm-up emails in E06.</p>
+<p>The copy plan and flow specifications may finish in the first build sprint.</p>
+<h2>Architecture Foundations</h2>
+<p><strong>Org strategy.</strong> One Marketing Cloud Next org, one Data 360 data space, business-unit feature off.
+- Each business unit maps one-to-one to a walled-off data space, so per-brand units would block the cross-brand profile and the shared opt-in (``).
+- Marketing Cloud Next runs without business units, and enabling the feature requires at least two data spaces. Leaving it off removes setup with no loss of function.
+- Brands are separated by:
+  - sender profile
+  - sending domain
+  - SMS short code
+  - master templates
+  - Communication Subscription
+  - a brand attribute on profile and engagement data
+- Trade-offs MGA accepts with this design:
+  - no data isolation between brands
+  - one shared sending-IP reputation (see Channels)</p>
+<p><strong>Access model.</strong> Use the standard Marketing Cloud Admin and Marketing Cloud Manager permission sets, layered by MGA job function. Viewing consent on records and in Data 360 depends on these permission sets. Defining marketer roles and user counts is an open question (brief Q20). There's no record-sharing design to build: this is a marketing org with no sales or service users.</p>
+<p><strong>Environments.</strong>
+- <em>Sandboxes.</em> A Developer Pro sandbox for build and integration testing, and a Partial Copy sandbox for user acceptance testing and segment checks against sampled production data.
+  - Marketing Cloud Next supports all sandbox types.
+  - Data 360 has to be turned on in each sandbox, and its connectors set up there.
+  - The sandbox email blackhole stays on, with up to five allowed test domains.
+- <em>Promotion.</em> Data 360 metadata (data streams, data lake objects, calculated insights, data graphs) moves sandbox-to-production in a DevOps Data Kit.
+  - The kit deploys only to a data space with the same prefix.
+  - Connector credentials don't travel, so every Shopify, Azure and paid-media connection is re-authorized after deployment.
+  - Marketing Cloud Next assets move with Salesforce Platform DevOps tools, with Data 360 objects deployed before the flows and content that reference them.
+- <em>Source control.</em> Use Salesforce CLI with a Git repository, since the build spans several workstreams and Data Kit retrieval is CLI-based.</p>
+<p><strong>Governance.</strong> MGA owns change management, governance and the operating model after go-live (decision log, 2026-10-13). Delivery hands over runbooks and naming conventions in the configuration knowledge transfer at the end of hypercare (E15). There is no delivery-run training epic: MGA's users take self-paced learning in Phase 0.</p>
+<p><strong>Integration posture.</strong> There is no middleware:
+- Shopify comes in through the native Data 360 Shopify Connector.
+- Partner systems come in as files through the native Azure Blob Storage connector.
+- Storefront behavior comes in through the Interactions SDK.
+- Outbound data goes through native Data 360 activation targets.</p>
+<p>That is all native connectors. The integration risk is in the inputs MGA and its vendors supply, which the build doesn't control.</p>
+<hr />
+<h2>Solution by Business Process</h2>
+<h3>1. Data 360 Foundation &amp; Unified Profile (E01)</h3>
+<p><strong>Business context.</strong> Today each Klaviyo account sees one brand. MGA can't see that a Little Tikes buyer also plays Miniverse, or that the same parent shops on Bratz.com.</p>
+<p><strong>Solution approach.</strong>
+- One data model in Data 360 for profiles, orders, catalog, consent, loyalty and app data.
+- An identity resolution ruleset that resolves a parent across stores and apps.
+- A profile data graph for personalization.
+- A calculated-insight framework that the flows and segments share.</p>
+<p><strong>Supporting architecture.</strong>
+- <em>Identity.</em> Start from the default ruleset (normalized email, device to known), then add Party Identification match rules on the Shopify customer ID and Snapser app ID.
+  - Without those rules, an app-only parent or an SMS-only subscriber never joins the cross-brand profile.
+  - Phone matching needs E.164 numbers on Contact Point Phone.
+  - Keep one active ruleset, since each ruleset consumes credits.
+  - The threshold for shared family email addresses is a business call tested on sample data in Phase 0 (G0101, G0102).
+- <em>COPPA.</em> Children are never contacts (``). A child's age band and birthday are attributes on the parent's profile, which replaces the 4 Little Tikes tagging automations.
+- <em>Data graphs.</em> A profile graph on the unified individual is required for dynamic content and recommendations. A lookup graph serves the Shopify catalog to product blocks (E10).
+- <em>Calculated insights.</em> Expect consolidation from the inventory's 39 down toward the pattern count, because one insight serves every brand variant of a flow.</p>
+<h3>2. Shopify Commerce Integration (E02)</h3>
+<p><strong>Business context.</strong> Shopify runs the three storefronts and holds customers, orders and the product catalog.</p>
+<p><strong>Solution approach.</strong>
+- <em>Connector.</em> The Data 360 Shopify Connector (beta, batch), with one connection per store. It brings in customers with consent fields, orders, order history, products, variants, prices, images, URLs and inventory.
+- <em>SDK.</em> The Salesforce Interactions SDK on the three storefronts captures browse, cart and checkout events in real time.
+- <em>Order confirmation.</em> Stays in Shopify's native notifications.</p>
+<p><strong>Supporting architecture.</strong>
+- <em>Catalog master.</em> Shopify is the source for product content, price and inventory (decision log). Product and variant IDs are the keys for:
+  - email product blocks
+  - price-drop, back-in-stock and low-inventory triggers
+  - the catalog graph</p>
+<p>MGA Shop sells Bratz and Little Tikes products too, so each product carries its storefront and brand.
+- <em>Abandonment source: the SDK only.</em> The native triggers read cart-level and product-level engagement objects mapped from a commerce source.
+  - We map only the SDK's cart and checkout events to those objects. The connector's batch abandonment objects are ingested for reporting and aren't mapped to the triggers. This prevents double sends from two sources feeding one trigger (G0207, G0703).
+  - Standard Cart, Catalog and Order interaction models cover the events. Custom SDK events are a last resort, because their schema can't change once deployed.
+- <em>Beta risk.</em> The connector is beta, enabled in Feature Manager and covered by the Beta Services Terms.
+  - The fallback is a custom Ingestion API build.
+  - MGA's legal and IT teams need to set a go/no-go date for the fallback (G0201).
+- <em>Dependency.</em> MGA's web team or agency deploys the SDK on three themes. Abandonment flows can't be tested until it's live (G0207), which puts storefront release dates on the critical path during the holiday code freeze.</p>
+<h3>3. Partner &amp; Enterprise Data Integrations (E03)</h3>
+<p><strong>Business context.</strong> Four systems hold data the flows and segments need:
+- Snapser: app identity and parental consent
+- Yotpo: loyalty balances and events
+- Bazaarvoice: reviews
+- the ERP: supplementary product fields</p>
+<p><strong>Solution approach.</strong> <em>Explicit assumption</em> (G0306): MGA or each vendor lands scheduled files in an Azure Blob Storage container that MGA owns, and Data 360 ingests them through the native connector. Delivery:
+- defines the file specifications
+- maps and ingests the files
+- reconciles the loads</p>
+<p>Delivery doesn't build or host vendor extract jobs.</p>
+<p><strong>Supporting architecture.</strong>
+- <em>Data streams.</em> File-based streams run in Upsert mode, with deletes handled by a delete file. Azure Blob streams run on a 5-, 15- or 30-minute schedule.
+- <em>Container setup.</em> MGA's IT team provides a private container, a container-scoped access token (SAS) and the IP allowlist. Source and target use separate container paths.
+- <em>Snapser.</em> Ingest only records with parental consent (``). Linking an app user to a storefront parent depends on the identifier Snapser shares (brief Q17, G0101).
+- <em>ERP.</em> A named list of fields Shopify doesn't hold. Anything beyond that list is a change order (G0303).
+- <em>Out until defined.</em> Azure warehouse data beyond the landing files, and the Amazon feed (G0001, G0002).</p>
+<h3>4. Klaviyo &amp; Yotpo Data Migration (E04)</h3>
+<p><strong>Business context.</strong> About three Klaviyo accounts' worth of subscribers and suppressions, plus Yotpo members, have to arrive intact. Opt-outs must be honored from day one.</p>
+<p><strong>Solution approach.</strong>
+- A one-time, reconciled load into Data 360 and Marketing Cloud Next of Klaviyo contacts and contact points, suppressions, and a Yotpo member snapshot. It starts once E01 is done.
+- Klaviyo consent is a separate epic (E17), because it can only load after the subscriptions exist (E05).
+- Klaviyo engagement history isn't migrated.</p>
+<p><strong>Supporting architecture.</strong>
+- <em>Contacts first.</em> Create contacts and contact points for every Klaviyo subscriber not already in Shopify. Consent import doesn't create contacts, so this has to land before E17.
+- <em>Missing consent.</em> A record with no consent value is treated as opted out.
+- <em>Suppressions.</em> Import hard bounces and complaints so they're never mailed, and before warm-up starts in E06. How Marketing Cloud Next holds a bulk bounce or complaint suppression list isn't confirmed in the sources checked (G0402, 🔴).
+- <em>Size.</em> S, rising to M if the suppression pattern (G0402) needs a custom build.</p>
+<h3>4a. Klaviyo Consent Import (E17)</h3>
+<p><strong>Business context.</strong> "Klaviyo wins" on consent at cutover: a parent's existing opt-ins and opt-outs carry over exactly.</p>
+<p><strong>Solution approach.</strong> Import Klaviyo consent by channel into the brand subscriptions built in E05, after the E04 contacts exist. Reconcile it, then run a final delta in E14 at cutover.</p>
+<p><strong>Supporting architecture.</strong>
+- <em>Load order is load-bearing</em> (G0407): E04 contacts, then E17 Klaviyo consent, then Shopify consent mapping going forward. The import skips any row whose consent date is older than the one stored, so loading Shopify first would quietly defeat the "Klaviyo wins" rule (G0404).
+- <em>File count.</em> Each consent import covers one channel, one subscription and one status, so the files multiply: per brand, per channel, per status, with an SMS sender code on each SMS file.
+- <em>EU evidence.</em> EU subscribers without a consent source and timestamp go to a re-permission campaign instead of a straight import (G0403).</p>
+<h3>5. Consent, Preference Center &amp; Privacy (E05)</h3>
+<p><strong>Business context.</strong> MGA wants one opt-in across the brand umbrella, under both COPPA and GDPR.</p>
+<p><strong>Solution approach.</strong>
+- Six Communication Subscriptions: three brands, each with email and SMS.
+- The umbrella sign-up writes all three brand subscriptions at once.
+- The preference center lets a parent manage each brand or unsubscribe from all.
+- After cutover, the preference center is the source of truth.</p>
+<p><strong>Supporting architecture.</strong>
+- <em>Consent check.</em> Consent is held per contact point and checked at send time, one subscription per send. Brand-level subscriptions let every flow check exactly one.
+- <em>Which flows check.</em> The check is on for every triggered flow except loyalty redemption confirmation (privacy team to confirm, G0503). All SMS is checked regardless.
+- <em>Preference pages.</em> Configured to MGA's design.
+- <em>GDPR evidence.</em> The Consent Audit Trail in Data 360 records consent changes.
+- <em>Erasure and access.</em> Privacy Requests cover the org and Data 360. Purging Shopify, Yotpo and Snapser so erased people aren't re-ingested is MGA's process.
+- <em>Open (🔴, G0504).</em> How a new Shopify checkout opt-in becomes subscription consent after cutover, and whether a Marketing Cloud Next unsubscribe is written back to Shopify. No source shows connector-sourced consent mapping to subscription consent on its own. Phase 0 designs the rule: accept a Shopify opt-in only when it's newer.</p>
+<h3>6. Email Deliverability (E06)</h3>
+<p><strong>Business context.</strong> 26.7 million emails a year across three brands, from new sending domains.</p>
+<p><strong>Solution approach.</strong>
+- A sender profile and authenticated sending domain per brand.
+- A warm-up plan for each domain, run on emails MGA's marketing users build (they prepare through self-paced learning in Phase 0).
+- E06 starts when E05 is done. Warm-up is paced by the mailbox providers and takes 6 weeks in every delivery lane; AI tooling doesn't shorten it.
+- E07–E09 start with E06 and can't finish before it, so E06 is on the critical path.</p>
+<p><strong>Supporting architecture.</strong>
+- <em>IPs.</em> At about 2.2 million emails a month, MGA is below the volume that triggers automatic dedicated IPs. Early dedicated IPs go through the Account Executive.
+- <em>Shared reputation.</em> IPs are assigned at the org level and route by message purpose (promotional or transactional), not by brand. MGA accepts one shared sending reputation across brands (G0602), or `` reopens.
+- <em>Suppression hygiene.</em> Imported hard bounces and complaints protect the new domains during warm-up.</p>
+<h3>6a. SMS Short-Code Registration (E16)</h3>
+<p><strong>Business context.</strong> About 300,000 SMS a year across three brands, each on its own short code.</p>
+<p><strong>Solution approach.</strong> Register three short codes with standard keywords. Submitted in Phase 0 and run as a parallel track. Registration goes through the carriers; the plan holds 12 weeks for approval in every lane (solution lead input), and approval has to land before E07–E09 start, since every SMS touch in those flows needs an approved code. Size XS: the work is the paperwork; the calendar belongs to the carriers.</p>
+<h3>7. Brand Templates &amp; Content Foundation (E10)</h3>
+<p><strong>Business context.</strong> Every flow touch, and MGA's own launch campaigns, need on-brand templates.</p>
+<p><strong>Solution approach.</strong>
+- Master email and SMS templates per brand, recreating the current Klaviyo layouts with no redesign.
+- Shared content blocks.
+- Product blocks driven by the Shopify catalog.</p>
+<p><strong>Supporting architecture.</strong>
+- <em>Data sources.</em> Templates bind to the profile data graph. Product blocks use repeaters on the catalog lookup graph.
+- <em>Event-triggered content.</em> These templates carry a single event data source, which can't be swapped after publish, so each event-triggered flow's template is built for its trigger.
+- <em>Client dependency.</em> MGA supplies all copy and imagery by agreed hand-off dates per flow wave. Late copy stops flow build and QA (G1002).</p>
+<h3>8. Welcome &amp; Lifecycle Flows (E08)</h3>
+<p><strong>Business context.</strong>
+- Three welcome series, one per brand.
+- MGA Shop post-purchase (new and returning customers) and win-back.
+- Four Little Tikes age-band automations.</p>
+<p><strong>Solution approach.</strong>
+- Welcome series are Automation Event-Triggered Flows on sign-up.
+- Post-purchase and win-back run on order events and recurring segment-based Audience Flows.
+- The four age-band automations become calculated attributes and segments on the parent profile, not flows (``).</p>
+<p><strong>Supporting architecture.</strong> Standard configuration on the E01 foundation. Each pattern is built once with brand variants.</p>
+<h3>9. Behavioral &amp; Commerce-Triggered Flows (E07)</h3>
+<p><strong>Business context.</strong> 17 flows recover browse, cart and checkout abandonment and act on price and stock changes.</p>
+<p><strong>Solution approach.</strong> These run on the native Marketing Cloud Next commerce triggers:
+- abandoned cart and abandoned checkout
+- browse and site abandonment
+- price drop
+- back-in-stock and low inventory</p>
+<p>Trigger event data drives personalization and branch conditions.</p>
+<p><strong>Supporting architecture.</strong>
+- <em>Timing.</em> Abandonment triggers set an inactivity window (10 minutes to 7 days) and a job frequency. Event-triggered flows run about 15 minutes after the event. Per-flow delays get set in Phase 0 (G0702).
+- <em>Price drop.</em> The trigger compares current and previous Shopify price for products a shopper viewed. A markdown done as a Shopify discount won't fire it (G0705).
+- <em>Back-in-stock (🔴, G0706).</em> The native trigger targets shoppers by product interest within a lookback window. If MGA's Klaviyo flow is an explicit "notify me" list, it needs a storefront capture form and a custom event, which is a larger pattern.
+- <em>Low inventory.</em> Need to confirm whether the alert is a shopper urgency message or an internal merchandising alert (G0706).
+- <em>Audience reach.</em> Only shoppers tied to a known email or phone get messages (G0704).</p>
+<h3>10. Loyalty Flows (E09)</h3>
+<p><strong>Business context.</strong> 11 Yotpo-driven flows: 7 for MGA Shop and 4 for Little Tikes.</p>
+<p><strong>Solution approach.</strong>
+- <em>Date-based flows</em> (birthday, anniversary, monthly and rewards reminders) are scheduled Audience Flows on segments.
+- <em>Event-driven flows</em> (redemption confirmation, refer-a-friend, program welcome) are Automation Event-Triggered Flows on the Yotpo file data (G0907).</p>
+<p><strong>Supporting architecture.</strong>
+- <em>Latency.</em> Redemption confirmation reaches the member after three steps: the Yotpo file drop, the 5-to-30-minute stream interval, and about 15 minutes of flow latency. If MGA needs it faster, a Yotpo webhook calling an On-Demand flow is the faster pattern and a change order.
+- <em>Program structure.</em> Whether MGA Shop and Little Tikes share one Yotpo program changes the data model (G0905).
+- <em>Yotpo's own emails.</em> Any loyalty emails Yotpo sends today are switched off at cutover (G0902).
+- <em>Platform change.</em> A move to TYB is a change order (G0906).</p>
+<h3>11. Segmentation, Activation &amp; Data Out (E11)</h3>
+<p><strong>Business context.</strong> MGA wants three kinds of cross-sell:
+- across brands
+- within a brand
+- between physical toys and digital apps</p>
+<p>It also wants paid-media audiences on TikTok and Instagram.</p>
+<p><strong>Solution approach.</strong>
+- <em>Segments.</em> Reusable cross-sell segments on the unified profile.
+- <em>Paid media.</em> Six activations (TikTok and Instagram for each brand).
+- <em>Exports.</em> Engagement and unsubscribe data to the Azure target. Bazaarvoice outbound for review requests (assumed).</p>
+<p><strong>Supporting architecture.</strong>
+- <em>Paid-media consent (🔴, G1102).</em> Every activated segment carries an advertising-consent rule and a rule that excludes child records and child-directed audiences. Whether advertising consent piggybacks on the email or SMS opt-in, or is its own purpose, is MGA privacy's call. No source grounds the choice. Activations can't go live until it's settled.
+- <em>Segment refresh.</em> Activation-triggered work follows each segment's publishing schedule.</p>
+<h3>12. Agentforce for Marketing (E12)</h3>
+<p><strong>Business context.</strong> MGA's marketers build weekly launch campaigns themselves after go-live.</p>
+<p><strong>Solution approach.</strong> Configure the standard Create a Campaign From a Brief action and Einstein segment creation, with brand guardrails. There are no custom agents.
+- The action drafts subject, preheader and body.
+- It creates a draft segment only when Einstein segment creation is enabled.</p>
+<p><strong>Supporting architecture.</strong> The org-level AI prerequisites must be enabled before the agent works (G1202).</p>
+<h3>14. Testing &amp; Cutover (E14)</h3>
+<p><strong>Business context.</strong> Klaviyo has to stay live until Marketing Cloud Next is proven, and cutover lands around the toy holiday peak.</p>
+<p><strong>Solution approach.</strong>
+- <em>QA.</em> Across three brands and two channels: rendering, consent checks, triggers and data.
+- <em>Parallel run.</em> Klaviyo and Marketing Cloud Next run side by side.
+- <em>Final loads.</em> Final Klaviyo and Yotpo loads, and a final consent delta (E17).
+- <em>Cutover.</em> Sequenced cutover and Klaviyo decommission. Domain warm-up is done in E06, before this epic.
+- <em>After go-live.</em> Hypercare is its own epic (E15).</p>
+<p><strong>Supporting architecture.</strong>
+- <em>Test environment.</em> User acceptance testing runs in the Partial Copy sandbox with the email blackhole on.
+- <em>Cutover sequence.</em> Flows are cut over by wave. For each brand, the Klaviyo flow is turned off at the same time its Marketing Cloud Next replacement goes on, so no shopper gets both. Klaviyo contract end and holiday code-freeze dates are set in Phase 0 (brief Q24).</p>
+<h3>15. Post-Go-Live Hypercare &amp; Knowledge Transfer (E15)</h3>
+<p><strong>Business context.</strong> Three brands go live at once on new sending domains, and the first weeks show whether trigger timing and segments work on real traffic.</p>
+<p><strong>Solution approach.</strong> Two weeks of hypercare after go-live (committed by the solution lead):
+- daily health checks on flow runs, triggers, data streams and consent checks
+- triage and fixes for production defects
+- a deliverability watch on the three domains
+- tuning of trigger timing and segments
+- final configuration knowledge transfer to MGA's team</p>
+<p>It ends with a handover checklist signed by MGA. New requests during hypercare are change requests (G1501).</p>
+<p><strong>Supporting architecture.</strong> Standard operational support. Connector re-authorization after the production deployment is checked on day one.</p>
+<hr />
+<h2>Key risks to the design</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Where</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shopify Connector still beta at go-live</td>
+<td>E02</td>
+<td>Production on Beta Services Terms, or a late switch to a custom Ingestion API build (G0201)</td>
+</tr>
+<tr>
+<td>SDK deployment during code freeze</td>
+<td>E02, E07</td>
+<td>Abandonment flows can't be tested until MGA's web team ships the SDK (G0207)</td>
+</tr>
+<tr>
+<td>Copy and imagery late</td>
+<td>E10, E07–E09</td>
+<td>MGA's critical path; flow build and QA stall (G1002)</td>
+</tr>
+<tr>
+<td>Partner files not produced</td>
+<td>E03, E09</td>
+<td>The landing-zone assumption fails. Extract builds become change orders (G0306)</td>
+</tr>
+<tr>
+<td>Paid-media consent undefined</td>
+<td>E11</td>
+<td>Activations can't go live (G1102)</td>
+</tr>
+<tr>
+<td>Shared IP reputation</td>
+<td>E06</td>
+<td>One brand's list problem affects all three (G0602)</td>
+</tr>
+<tr>
+<td>MGA not ready to build warm-up emails</td>
+<td>E06</td>
+<td>E06 is on the critical path; a late start moves go-live (G0608)</td>
+</tr>
+<tr>
+<td>Carrier approval late</td>
+<td>E16</td>
+<td>E07–E09 can't start without approved short codes</td>
+</tr>
+<tr>
+<td>Migration load order</td>
+<td>E04, E17</td>
+<td>Getting it wrong silently breaks "Klaviyo wins" (G0407)</td>
+</tr>
+</tbody>
+</table>
+<h2>Open design questions for Phase 0</h2>
+<p>These are the 🔴 forks with no grounding source: G0504 (Shopify consent after cutover), G1102 (paid-media consent), G0706 (back-in-stock pattern) and G0402 (suppression import). The identity thresholds (G0101, G0102) and per-flow timing (G0702) also go into Phase 0. The full list is on the scope page.</p></div></section><section id="delivery" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Delivery plan</h2><div class="sz-doc"><h1>MGA Entertainment: Delivery Plan</h1>
+<p><strong>Klaviyo to Marketing Cloud Next and Data 360</strong> · 2026-10-13 · Status: draft for solution-lead review</p>
+<p><strong>Total program duration: 26 weeks (per user commitment).</strong> Wall-clock elapsed, Phase 0 through hypercare exit, including MGA review and sign-off time. The Solution Lead committed 26 weeks inside the benchmark-based range of 14–30 weeks (top-down from engagement shape: Multi-Cloud + Data Integration / Medium, 16–24 weeks, widened for regulated data and assumption density).</p>
+<blockquote>
+<p><em>This figure is benchmark-based, derived from the AI model's training data and general delivery patterns (not Salesforce-validated) — not a commitment. Final figures are confirmed through the applicable commercial agreement.</em></p>
+</blockquote>
+<p><strong>How the range was built</strong>
+- <strong>Baseline 16–24 weeks.</strong> Sixteen epics (5 L, 5 M, 5 S, 1 XS, no XL) across Marketing Cloud Next (MC Next) and Data 360 match the Multi-Cloud + Data Integration / Medium row. The epic count runs above that row's typical range, but six of them are small or extra-small.
+- <strong>+15% for regulated data.</strong> GDPR consent evidence and audit trail, plus COPPA, apply (E05).
+- <strong>±10% for confidence.</strong> 27 of 98 open items are working assumptions, and eight epics carry a larger size if one breaks.</p>
+<p><strong>What sets the high end</strong>
+- <strong>E02, Shopify integration.</strong> The connector is in beta. A fallback to a custom Ingestion API build would push E02 to XL. <em>Tighten with:</em> MGA's decision on the Beta Services Terms and a fallback date (G0201).
+- <strong>E01, unified profile.</strong> Volumes and identity rules are unknown. <em>Tighten with:</em> identifiers per source and record counts per Klaviyo account (G0101, G0103).
+- <strong>E07, triggered flows.</strong> The back-in-stock pattern isn't decided. <em>Tighten with:</em> the Phase 0 decision on G0706.</p>
+<p><strong>Against the client target.</strong> MGA's March 1, 2027 date is about 20 weeks from today, before contracting and Phase 0. The 26-week plan lands about 6 weeks or more past it. MGA can extend Klaviyo month to month if launch slips (G1401), so March 1 is a target, not a hard deadline. Use that flex to plan, not as a buffer we spend by default.</p>
+<hr />
+<h2>Phases</h2>
+<p>Phases run in sequence, with one parallel track. Phase 0 (3 weeks) and hypercare (2 weeks) were set by the Solution Lead; the remaining 21 weeks are split across the build phases by T-shirt points. Two pieces of work are paced by outside parties and don't compress in any delivery lane: SMS short-code approval (carriers, 12 weeks) and domain warm-up (mailbox providers, 6 weeks).</p>
+<h3>Phase 0: Design (3 weeks, weeks 1–3)</h3>
+<ul>
+<li><strong>Settles:</strong> the four open design decisions (Shopify consent after cutover G0504, paid-media consent G1102, back-in-stock pattern G0706, suppression import G0402), identity rules, partner file specs, flow specs, and the copy hand-off plan per flow wave.</li>
+<li><strong>Starts:</strong> SMS short-code registration for 3 brands (E16, parallel track). MGA's marketing users take self-paced Marketing Cloud Next learning, so they're ready to build the warm-up emails in E06.</li>
+<li><strong>Learns:</strong> holiday code-freeze dates (G1402), the beta-connector fallback date (G0201), and MGA's cutover approach (all brands or brand by brand).</li>
+<li><strong>Done when:</strong> decisions logged and signed off by MGA; registration submitted; self-paced learning complete.</li>
+</ul>
+<h3>Phase 1: Foundation (4 weeks, weeks 4–7)</h3>
+<ul>
+<li><strong>E01</strong> Data 360 foundation and unified profile · <strong>E10</strong> brand templates (Klaviyo layout recreated; MGA supplies copy and imagery).</li>
+<li><strong>Done when:</strong> profiles resolve on sample data; master templates are approved for 3 brands.</li>
+<li>Depends on: Phase 0 decisions.</li>
+</ul>
+<h3>Phase 2: Data In and Consent (7 weeks, weeks 8–14)</h3>
+<ul>
+<li><strong>E02</strong> Shopify connector (3 stores) and Interactions SDK (3 storefronts) · <strong>E03</strong> partner files from MGA's Azure container · <strong>E04</strong> Klaviyo contacts, contact points, suppressions and Yotpo members. These three start together once E01 is done.</li>
+<li>Then <strong>E05</strong> brand subscriptions, preference center and privacy, once E02, E03 and E04 are all done.</li>
+<li>Then <strong>E17</strong> Klaviyo consent import into those subscriptions, before Shopify consent is mapped (load order G0407).</li>
+<li><strong>Done when:</strong> all sources ingest on schedule; the trial migration reconciles; subscriptions and the preference center work in the build sandbox; Klaviyo consent is imported and reconciled.</li>
+<li>Depends on: E01. MGA's web team deploys the SDK; MGA and vendors drop the partner files.</li>
+</ul>
+<h3>Phase 3: Deliverability and Journeys (8 weeks, weeks 15–22)</h3>
+<ul>
+<li><strong>E06</strong> email deliverability: sender profiles, authentication and warm-up for 3 domains, with MGA building the warm-up emails. Warm-up takes 6 weeks and sets the floor for this phase.</li>
+<li><strong>E07</strong> behavioral and commerce triggers · <strong>E08</strong> welcome and lifecycle · <strong>E09</strong> loyalty on Yotpo. They start with E06 and can't finish before it. 38 flows built as shared patterns with brand variants.</li>
+<li><strong>E11</strong> segments, calculated insights and 6 paid-media activations, then <strong>E12</strong> Agentforce campaign brief and segment creation.</li>
+<li><strong>Done when:</strong> domains are authenticated and warmed up; flows are built and tested per brand with MGA copy loaded; activations run in the sandbox; Agentforce actions run with brand guardrails.</li>
+<li>Depends on: E05 (E06, E11); E16 approval at week 12 (E07–E09); E02, E10 (flows); E03 (loyalty); E11 (Agentforce).</li>
+</ul>
+<h3>Phase 4: Testing and Cutover (2 weeks, weeks 23–24)</h3>
+<ul>
+<li><strong>E14</strong>: system and user acceptance testing in the Partial Copy sandbox, production deployment, final Klaviyo and Yotpo loads with a final consent delta (E17), Klaviyo switch-off. Domain warm-up is finished in E06 before this phase.</li>
+<li>Month-to-month Klaviyo makes a brand-by-brand cutover possible. MGA chooses in Phase 0.</li>
+<li>Held at 2 weeks in every delivery lane (Solution Lead). AI tooling doesn't shorten testing across 3 brands × email and SMS.</li>
+<li>Depends on: E04, E07, E08, E09, E17.</li>
+</ul>
+<h3>Phase 5: Hypercare and Knowledge Transfer (2 weeks, weeks 25–26)</h3>
+<ul>
+<li><strong>E15</strong>: monitoring, defect triage, deliverability watch on 3 domains, tuning, then final configuration knowledge transfer and handover.</li>
+<li><strong>Done when:</strong> exit criteria are met, configuration knowledge transfer is complete, and MGA's owner is in place on day 15 (G1501).</li>
+</ul>
+<h3>Parallel track: SMS Short-Code Registration (12 weeks, weeks 1–12)</h3>
+<ul>
+<li><strong>E16</strong>: carrier approval of 3 short codes, submitted in Phase 0. Must be approved before Phase 3 starts.</li>
+</ul>
+<p><strong>Critical path:</strong> E01 → E02 / E03 / E04 → E05 → E06 (with E07–E09) → E14 → E15. Slippage on any one cascades. E16 isn't on the path at 12 weeks, but a carrier delay past week 14 pushes Phase 3. The SDK deployment inside E02 sits with MGA's web team during the holiday peak.</p>
+<hr />
+<h2>Standard processes (all phases)</h2>
+<ul>
+<li><strong>Environments:</strong> build in a Developer Pro sandbox, UAT in a Partial Copy sandbox with the email blackhole on; Data 360 metadata promoted with the DevOps Data Kit, objects deployed before the flows that use them.</li>
+<li><strong>Testing:</strong> unit tests per flow pattern and brand variant in Phase 3; system and UAT in Phase 4; seed-list and rendering checks for email and SMS on all 3 brands.</li>
+<li><strong>Deployment:</strong> release per phase into UAT; one production cutover (or one per brand if MGA chooses).</li>
+<li><strong>Enablement:</strong> MGA's users take self-paced learning in Phase 0 and build the warm-up emails in Phase 3; Salesforce delivers final configuration knowledge transfer in E15. There's no delivery-run training epic.</li>
+<li><strong>Client hand-offs:</strong> decisions, DNS, SDK deployment, partner files, warm-up emails, copy and imagery, UAT sign-off. Dates are set in Phase 0.</li>
+</ul>
+<h2>Risks</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Phase</th>
+<th>Impact</th>
+<th>Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Holiday code freeze blocks SDK deployment (G1402)</td>
+<td>2</td>
+<td>Real-time abandonment flows slip</td>
+<td>Get freeze dates in Phase 0; deploy the SDK before the freeze or plan around it</td>
+</tr>
+<tr>
+<td>Shopify connector still in beta at go-live (G0201)</td>
+<td>2</td>
+<td>E02 could go to XL on fallback</td>
+<td>Fallback decision date set in Phase 0</td>
+</tr>
+<tr>
+<td>E05 waits on three data epics</td>
+<td>2</td>
+<td>Any one of E02, E03, E04 running late holds consent and everything after it</td>
+<td>Track all three weekly; partner file specs signed in Phase 0</td>
+</tr>
+<tr>
+<td>MGA not ready to build warm-up emails (G0608)</td>
+<td>3</td>
+<td>E06 is on the critical path; go-live moves</td>
+<td>Self-paced learning done in Phase 0; content owner named before Phase 3</td>
+</tr>
+<tr>
+<td>Carrier approval late (E16)</td>
+<td>0–3</td>
+<td>E07–E09 can't start</td>
+<td>Submit in week 1; two weeks of slack before Phase 3</td>
+</tr>
+<tr>
+<td>Copy and imagery late (MGA-owned)</td>
+<td>3</td>
+<td>Flows can't finish testing</td>
+<td>Hand-off dates per flow wave agreed in Phase 0</td>
+</tr>
+<tr>
+<td>Identity rules and volumes unknown (G0101, G0103)</td>
+<td>1</td>
+<td>E01 could go to XL</td>
+<td>Sample data and counts in Phase 0</td>
+</tr>
+<tr>
+<td>Decision pace over the holidays</td>
+<td>0–4</td>
+<td>Every phase stretches</td>
+<td>Named decision-makers and a weekly decision forum</td>
+</tr>
+<tr>
+<td>Hypercare exit undefined (G1501)</td>
+<td>5</td>
+<td>Support runs open-ended</td>
+<td>Exit criteria agreed before UAT</td>
+</tr>
+</tbody>
+</table>
+<hr /></div></section><section id="efficiency" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">AI delivery efficiency</h2><div class="sz-doc"><h1>AI Delivery Efficiency Analysis — MGA Entertainment MC Next 2026</h1>
+<h2>So What</h2>
+<p><strong>~10–21% realized delivery efficiency at Mid readiness.</strong> A pace and quality lift within the same team shape — not headcount reduction, not a pricing input.</p>
+<p>Where the gains show up on this project:
+- <strong>Documentation &amp; Knowledge Management</strong> (~10–23%): Phase 0 specs, consent evidence and the knowledge-transfer material (E05, E15) draft fast; privacy review caps it.
+- <strong>Analysis &amp; Design</strong> (~8–21%): about 20 flow patterns with brand variants (E07, E08, E09) and the segment model (E11).
+- <strong>Technical Engineering &amp; QA</strong> (~7–18%): test data and cases across 3 brands × email and SMS (E14); the beta connector and identity rules carry the most review overhead.</p>
+<p><strong>Where AI does not help</strong>: privacy sign-off on consent rules, holiday code-freeze and cutover decisions, MGA's copy, SMS registration (E16) and domain warm-up (E06) lead times — plus the beta Shopify connector and identity-resolution work in E01 and E02.</p>
+<p><strong>To move up to High readiness (~12–25%)</strong>: approved AI tools in the build team's environments, a published AI data-handling policy from MGA's privacy team, a weekly decision forum through the holiday peak.</p>
+<p><strong>AI-native operating model (conditional): ~16–34%.</strong> Only if MGA commits to that way of working; four of five must-haves are unconfirmed. Provisional, not a benchmark.</p>
+<h2>Headline</h2>
+<p><strong>Realized: ~10–21%</strong> (Mid readiness) · <strong>Task-level blend: ~30–45%</strong> · <strong>Realization factor: 0.35–0.45</strong> — configuration-led Marketing Cloud Next (MC Next) and Data 360 build with real integration work, no heavy legacy integration; COPPA and GDPR review overhead keeps it off the greenfield row · <strong>Confidence: Assumed</strong></p>
+<h2>Client-Readiness Scenarios</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Realized Band</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Low readiness</td>
+<td>~8–17%</td>
+<td>AI tools restricted or stuck in privacy review because of children's data; gains stay modest.</td>
+</tr>
+<tr>
+<td>Mid readiness (current ✓)</td>
+<td>~10–21%</td>
+<td>MGA's likely position today; three signals still unconfirmed.</td>
+</tr>
+<tr>
+<td>High readiness</td>
+<td>~12–25%</td>
+<td>Fast decisions, clean consent data and approved tooling capture the upper end.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Current scenario</strong>: Mid (score 4/8)</p>
+<h3>Signals behind the score</h3>
+<ul>
+<li><strong>AI tooling posture</strong>: 1/2 — unknown; no discovery evidence on whether MGA permits AI tools on delivery work. Scored at the model default.</li>
+<li><strong>Delivery velocity / speed bias</strong>: 1/2 — unknown; marketing runs a weekly launch cadence, but decision and release pace (and the holiday code freeze) aren't known.</li>
+<li><strong>Data &amp; environment hygiene</strong>: 1/2 — Shopify is a clean catalog master and build and test sandboxes are planned; three separate Klaviyo accounts and unknown consent source/timestamp quality hold it at Mid.</li>
+<li><strong>Legal / security / compliance posture</strong>: 1/2 — unknown; COPPA and GDPR apply and the privacy team has open confirmations, but there's no evidence on an AI data-handling policy.</li>
+</ul>
+<h3>What it takes to move up</h3>
+<ul>
+<li><strong>Low → Mid</strong>: approve AI tools for delivery work on non-production data; confirm consent data quality in the Klaviyo exports.</li>
+<li><strong>Mid → High</strong>: approved AI tools in the build team's environments; a published AI data-handling policy; a weekly decision forum with named decision-makers through the holiday peak.</li>
+</ul>
+<h2>AI-Native Band (conditional, provisional)</h2>
+<p><strong>~16–34%</strong>, behind the AI-native qualification gate — verdict <strong>conditional</strong>. Must-haves M1–M4 (including decision velocity and client capacity) are unknown and M5 is a gap. The diagnosis is grounded: task-level gains wash out at the delivery level because coordination and review don't change [1][5]. The magnitude is not: no controlled study measures end-to-end compression above ~25%, so this band is provisional until delivered actuals exist. The augmented and AI-native bands overlap; the qualification status, not the number, separates the lanes.</p>
+<h2>By Category</h2>
+<h3>Documentation &amp; Knowledge Management — realized ~10–23% (task-level ~30–50%)</h3>
+<ul>
+<li><strong>Driving epics</strong>: E05 (L), E15 (S)</li>
+<li><strong>How it shows up here</strong>: Phase 0 decision records, partner file specs, consent evidence and audit documentation, and the hypercare knowledge transfer and handover all draft quickly [7][11]. Every consent artifact goes through MGA's privacy review, which caps the realized gain.</li>
+</ul>
+<h3>Analysis &amp; Design — realized ~8–21% (task-level ~25–45%)</h3>
+<ul>
+<li><strong>Driving epics</strong>: E01 (L), E07 (L), E08 (M), E09 (M), E11 (M)</li>
+<li><strong>How it shows up here</strong>: 38 flows reduce to about 20 patterns with brand variants, which suits drafted specs and segment and calculated-insight models [2]. Identity rules and MGA sign-off on each pattern stay human-paced.</li>
+</ul>
+<h3>Technical Engineering &amp; QA — realized ~7–18% (task-level ~20–40%)</h3>
+<ul>
+<li><strong>Driving epics</strong>: E02 (L), E03 (M), E04 (M), E14 (L)</li>
+<li><strong>How it shows up here</strong>: test data and test cases across 3 brands × email and SMS, migration mapping and SDK and file mapping benefit [3][11]. The beta Shopify connector and identity resolution sit outside the frontier, where review overhead is largest [5][8].</li>
+</ul>
+<h3>Project Management &amp; Operations — realized ~3–14% (task-level ~10–30%)</h3>
+<ul>
+<li><strong>Driving epics</strong>: E14 (L), E15 (S)</li>
+<li><strong>How it shows up here</strong>: status reports and meeting notes compress [7]. Coordinating three brands, MGA's web team and partner vendors through the holiday peak stays human.</li>
+</ul>
+<h2>By Role Type</h2>
+<h3>Functional Consultant — realized ~8–21% (task-level ~25–45%)</h3>
+<ul>
+<li><strong>Amplified</strong>: flow-pattern and variant specs, segment and calculated-insight models, configuration documentation, knowledge transfer [2][7][11]</li>
+<li><strong>Still human-only</strong>: brand SME sign-off on each pattern and variant; SMS short-code registration lead time</li>
+<li><strong>How the day changes</strong>: about 20 flow patterns × 3 brand variants are well suited to drafted specs; the consultant spends more time verifying variants than writing them.</li>
+</ul>
+<h3>Quality Assurance — realized ~8–21% (task-level ~25–45%)</h3>
+<ul>
+<li><strong>Amplified</strong>: test data, test cases and test scripts across 3 brands × email and SMS; migration reconciliation checks [3][11]</li>
+<li><strong>Still human-only</strong>: consent-check and COPPA evidence sign-off; independent judgment on AI-drafted output</li>
+<li><strong>How the day changes</strong>: coverage across brand and channel combinations generates quickly; QA stays the independent check on that output.</li>
+</ul>
+<h3>Solution Architect — realized ~7–18% (task-level ~20–40%)</h3>
+<ul>
+<li><strong>Amplified</strong>: drafts of the flow pattern library, consent model and Phase 0 decision records [2][11]</li>
+<li><strong>Still human-only</strong>: the four Phase 0 design decisions with MGA privacy and marketing; consent-rule sign-off</li>
+<li><strong>How the day changes</strong>: first drafts arrive fast; the architect's time shifts to review and to settling the forks with MGA.</li>
+</ul>
+<h3>Technical Architect — realized ~5–16% (task-level ~15–35%)</h3>
+<ul>
+<li><strong>Amplified</strong>: Data 360 mapping drafts, DevOps Data Kit packaging, SDK configuration [2][4]</li>
+<li><strong>Still human-only</strong>: identity rules on unknown volumes (E01); the beta Shopify connector fallback (E02)</li>
+<li><strong>How the day changes</strong>: the hardest work sits outside the frontier, where review overhead absorbs most of the gain [1][5].</li>
+</ul>
+<h3>Developer — realized ~5–16% (task-level ~15–35%)</h3>
+<ul>
+<li><strong>Amplified</strong>: email template code recreating the Klaviyo layouts, preference center code, defect analysis [4][8]</li>
+<li><strong>Still human-only</strong>: email-client rendering fixes across 3 brands; code review</li>
+<li><strong>How the day changes</strong>: template code drafts faster, but rendering quirks and review keep the gain at the enterprise row, not greenfield.</li>
+</ul>
+<h3>Project / Program Manager — realized ~3–14% (task-level ~10–30%)</h3>
+<ul>
+<li><strong>Amplified</strong>: status reports, meeting notes, decision logs and hand-off tracking [7][11]</li>
+<li><strong>Still human-only</strong>: stakeholder alignment across three brands, the web team and vendors; holiday freeze and cutover decisions</li>
+<li><strong>How the day changes</strong>: reporting compresses; the day stays dominated by chasing MGA hand-offs through the holiday peak.</li>
+</ul>
+<h2>Human-Only Work</h2>
+<ul>
+<li><strong>Project Pulse Reports</strong> — trust-building with MGA's sponsor; AI summarizes but doesn't facilitate.</li>
+<li><strong>Stakeholder Alignment</strong> — three brands plus marketing, e-commerce, privacy and IT decision-makers; people decide.</li>
+<li><strong>Conflict Resolution</strong> — human judgment.</li>
+<li><strong>Privacy sign-off on consent rules</strong> — MGA's privacy team approves the consent-check rule and GDPR/COPPA handling.</li>
+<li><strong>Holiday code-freeze and cutover decisions</strong> — MGA sets freeze windows and chooses all-brand or brand-by-brand cutover.</li>
+<li><strong>Client hand-offs</strong> — copy, imagery, SDK deployment and SMS short-code registration (E16) and domain warm-up (E06) are MGA-owned, carrier-paced or ISP-paced, and AI doesn't shorten them.</li>
+</ul>
+<h2>Assumptions &amp; Caveats</h2>
+<ul>
+<li>Task-level gains come from published 2022–2026 studies; a realization factor (by project shape) accounts for Amdahl's law, review overhead, and unmoved human work.</li>
+<li><strong>Honest range for coding</strong>: RCT evidence spans −19% (METR 2025 [1], mature open source) to +21% (Paradis/Google 2024 [4], complex enterprise) to +55% (Peng/GitHub 2022 [3], greenfield lab). The realistic-enterprise row is the defensible starting point for integration and custom work.</li>
+<li>Individual gains ≠ team gains: DORA 2024 [5] measured individual productivity rising while delivery stability and throughput fell.</li>
+<li>Model capability is racing ahead of realized workflow gains (Stanford HAI 2026 [9]); that gap is why project-level bands stay in ~10–25%.</li>
+<li>Three of four readiness signals are unconfirmed and scored at the model default; the scenario moves once MGA answers.</li>
+<li>Bands are qualitative and project-specific — no hours, FTE, or cost implications are computed or implied.</li>
+</ul>
+<h2>Sources</h2>
+<ol>
+<li>METR (July 2025) — RCT, 16 experienced developers; measured ~19% slower with AI despite feeling faster.</li>
+<li>BCG × Harvard (2023, 2025 pilots) — 12–40% time savings in-scope; performance drops outside the "jagged frontier."</li>
+<li>Peng et al., GitHub (2022) — lab RCT, ~55% faster on a greenfield task.</li>
+<li>Paradis et al., Google (2024) — RCT, 96 engineers, ~21% time reduction on a complex enterprise task.</li>
+<li>DORA 2024 State of DevOps — individual productivity up, team delivery stability and throughput down.</li>
+<li>McKinsey State of AI (2025) — function-level gains cluster at 10–30% for software and marketing.</li>
+<li>GitClear AI Code Quality (2025) — code cloning up, refactoring down; evidence of review and maintenance overhead.</li>
+<li>Stanford HAI AI Index 2026 — capability and adoption racing ahead of measured workflow gains.</li>
+<li>Scopezilla internal observations (2025–2026) — directional; documentation and meeting operations show the most reliable gains.</li>
+</ol></div></section><section id="adrs" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Architecture decision records</h2><div class="sz-doc"><h1>0001 — All brands run in one Marketing Cloud Next business unit on one Data 360 data space</h1>
+<p><strong>Date:</strong> 2026-10-13 · <strong>Status:</strong> accepted · <strong>Source:</strong> client-supplied</p>
+<h2>Context</h2>
+<p>MGA Entertainment runs three Shopify direct-to-consumer storefronts (MGA Shop, Bratz, Little Tikes) and today runs a separate Klaviyo account for each. Their main goals for the move are cross-brand customer visibility, one opt-in across all brands, central management of unsubscribes and preferences, and cross-sell between brands (Little Tikes to Baby Born, for example) and between physical and digital products (toy buyers and Snapser app users).</p>
+<p>In Marketing Cloud Next, each business unit maps one-to-one to a Data 360 data space. Data spaces are walled off: data, content, campaigns and access controls can't be shared between them, and a campaign can only use segments and content from its own business unit. Marketing Cloud Next can also run with no business units at all. Separate business units per brand would therefore block cross-brand segmentation, a shared opt-in, and cross-brand cross-sell.</p>
+<h2>Decision</h2>
+<p>All brands share one Salesforce org, one Marketing Cloud Next business unit, and one Data 360 data space. Brands are told apart inside that partition by sender profile, sending domain, SMS short code, content and templates, and brand attributes on the unified profile and in segments. They are not separate partitions.</p>
+<h2>Consequences</h2>
+<ul>
+<li>Identity resolution produces one Unified Individual per person across all three storefronts and the Snapser apps, so cross-brand and physical/digital cross-sell is possible.</li>
+<li>One consent model: a shared umbrella opt-in plus brand-level subscriptions, managed in one preference center.</li>
+<li>Flow patterns that repeat across brands (abandoned cart, browse abandonment, back-in-stock, welcome, loyalty) can be built once as shared patterns with brand-specific versions, not once per brand.</li>
+<li>No data separation between brands. If brand-level user access or data isolation is needed later (an acquired brand, a regional or regulatory split such as EU recipients), it needs another business unit and data space, and assets in this unit can't be moved there (a campaign's business unit can't be changed after it's created).</li>
+<li>Brand-level reporting and message-credit tracking come from brand attributes and filters, not per-business-unit consumption views.</li>
+</ul>
+<h2>Grounds</h2>
+<ul>
+<li>Customer answer, "Questions for MGA Entertainment" (10/13/26), Business unit organization row: "Assume 1 combined org for all brands"; cross-brand visibility, single opt-in, and cross-sell requirements in the same row.</li>
+<li>User direction, 2026-10-13: "Assume one business unit and one Data 360 data space for all brands combined."</li>
+<li>Marketing Cloud Next business units built on data spaces (1:1, walled off, optional).</li>
+<li>Business units in Marketing Cloud Next: data partitioning and governance (assignments can't be changed afterward).</li>
+</ul></div><div class="sz-doc"><h1>0002 — COPPA and GDPR both apply; all data is hosted in the US</h1>
+<p><strong>Date:</strong> 2026-10-13 · <strong>Status:</strong> accepted (US hosting is an assumption pending customer confirmation) · <strong>Source:</strong> client-supplied</p>
+<h2>Context</h2>
+<p>MGA markets kids' brands (Little Tikes, Bratz, Baby Born, Miniverse) and today tags Little Tikes customers by child age (0–12 months through 5+ years). The Snapser apps hold parent-consent data. The customer has confirmed that US children's privacy rules (COPPA) and EU data protection rules (GDPR) both apply, so EU recipients are in the audience. The customer has not stated any data residency requirement.</p>
+<h2>Decision</h2>
+<ol>
+<li><strong>COPPA.</strong> The marketing contact is always the parent or adult. Children are never addressable contacts in Marketing Cloud Next. Child age or birthday is stored only as an attribute of the parent's profile, used for age-band segmentation. Snapser app data comes in only for records with parental consent.</li>
+<li><strong>GDPR.</strong> EU recipients get explicit, provable consent per channel (captured with source and timestamp), a working preference center and unsubscribe, and handling for data-subject requests (access, erasure) across the Salesforce org and Data 360.</li>
+<li><strong>Hosting.</strong> All brands and regions, EU included, live in the single US-hosted org and data space set by ``. There's no regional partition.</li>
+</ol>
+<h2>Consequences</h2>
+<ul>
+<li>The consent model, preference center, and migrated Klaviyo consent must carry evidence of how and when consent was given. Migrated EU subscribers without provable consent may need re-permissioning, not a straight import.</li>
+<li>Erasure and access requests must reach Data 360 as well as the org. Salesforce Privacy Center does this but is a separately licensed add-on. Without it, the process is manual or needs another tool.</li>
+<li>Lawful transfer of EU personal data to the US (data processing agreement, transfer mechanism) is a customer and legal responsibility, not delivery scope.</li>
+<li>If the customer later requires EU data to stay in the EU, this decision and `` both reopen: likely a second org or data space, which is a major change order.</li>
+</ul>
+<h2>Grounds</h2>
+<ul>
+<li>User direction, 2026-10-13: "COPPA rules apply, GSRM (EU) rules apply. Customer has not yet advised of data residency requirements so we are assuming that data can be housed in the US."</li>
+<li>"Customer provided Flows" (10/13/26): Little Tikes "Customer Segmentation – Ages 0–12 Months … 5+ Years" automated tagging flows.</li>
+<li>"Questions for MGA Entertainment" (10/13/26): Snapser "parent-consent data"; business-unit question referencing France and Italy.</li>
+<li>Marketing Cloud Next consent model: consent is held per contact point and checked at send time.</li>
+<li>Privacy Requests delete records across the org and Data 360. Privacy Center supports GDPR access, portability, and erasure.</li>
+</ul></div></section>
+<hr class="sz-divider">
+<p class="sz-note">Prepared by Salesforce Professional Services · October 2026 · Pricing not included.</p>
+</main>
+<script>
+document.querySelectorAll('.sz-sidebar-link').forEach(function(a){a.addEventListener('click',function(){document.querySelector('.sz-sidebar').classList.remove('open');document.getElementById('sz-overlay').classList.remove('active');});});
+document.querySelectorAll('.sz-filter').forEach(function(f){
+  var tbl=document.getElementById(f.dataset.table);
+  f.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){
+    f.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
+    tbl.querySelectorAll('tbody tr').forEach(function(tr){tr.style.display=(b.dataset.cat==='all'||tr.dataset.cat===b.dataset.cat)?'':'none';});
+  });});
+});
+</script>
+</body>
+</html>
