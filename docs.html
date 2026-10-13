@@ -240,7 +240,7 @@
 <p><strong>MGA owns:</strong> change management and experience design; all copy and imagery (delivery recreates the current Klaviyo layouts); storefront sign-up forms in Shopify; SDK deployment on the storefronts; the Azure landing zone and the vendor file drops into it.</p>
 <h2>Solution Highlights</h2>
 <p><strong>Org model.</strong> One business unit and one data space, with the business-unit feature off. In Marketing Cloud Next each business unit maps one-to-one to a walled-off data space, so per-brand units would block the cross-brand profile and the shared opt-in. Brands are separated by sender profile, sending domain, SMS short code, master templates, subscription and a brand attribute. MGA accepts no data isolation between brands and one shared sending-IP reputation.</p>
-<p><strong>Identity.</strong> The default Data 360 ruleset (normalized email, device to known), plus match rules on the Shopify customer ID and Snapser app ID so that app-only and SMS-only parents join the profile. Children are never contacts. A child's age band and birthday sit on the parent's profile, which replaces the four Little Tikes tagging automations.</p>
+<p><strong>Identity.</strong> The default Data 360 ruleset (normalized email, device to known), plus match rules on the Shopify customer ID and Snapser app ID so that app-only and SMS-only parents join the profile. The ruleset is built in Phase 1 and turned on once all data is imported at the end of Phase 2, so matching is tuned on real data. Children are never contacts. A child's age band and birthday sit on the parent's profile, which replaces the four Little Tikes tagging automations.</p>
 <p><strong>Integration.</strong> All native connectors, with no middleware:
 - Shopify Connector, one connection per store, for customers, orders, history, catalog and inventory. Shopify is the catalog master.
 - Interactions SDK on the three storefronts for real-time browse, cart and checkout events. These SDK events are the only source for the abandonment triggers, which prevents duplicate sends from the connector's batch abandonment data.
@@ -451,6 +451,7 @@
   - Without those rules, an app-only parent or an SMS-only subscriber never joins the cross-brand profile.
   - Phone matching needs E.164 numbers on Contact Point Phone.
   - Keep one active ruleset, since each ruleset consumes credits.
+  - <em>Timing.</em> Build and test the ruleset on sample data in Phase 1 with automatic runs off, then turn it on once every source is imported at the end of Phase 2 (Shopify, partner files, Klaviyo contacts and consent). A ruleset's automatic runs can be disabled and the run kicked off manually. Unifying on partial data would mean re-tuning thresholds and re-checking segments once the rest lands; turning it on once the data is complete means one full run, threshold tuning with MGA on real data, then the daily schedule.
   - The threshold for shared family email addresses is a business call tested on sample data in Phase 0 (G0101, G0102).
 - <em>COPPA.</em> Children are never contacts (``). A child's age band and birthday are attributes on the parent's profile, which replaces the 4 Little Tikes tagging automations.
 - <em>Data graphs.</em> A profile graph on the unified individual is required for dynamic content and recommendations. A lookup graph serves the Shopify catalog to product blocks (E10).
@@ -708,7 +709,7 @@
 <h3>Phase 1: Foundation (4 weeks, weeks 4–7)</h3>
 <ul>
 <li><strong>E01</strong> Data 360 foundation and unified profile · <strong>E10</strong> brand templates (Klaviyo layout recreated; MGA supplies copy and imagery).</li>
-<li><strong>Done when:</strong> profiles resolve on sample data; master templates are approved for 3 brands.</li>
+<li><strong>Done when:</strong> the identity ruleset is built and tested on sample data, with automatic runs off; master templates are approved for 3 brands.</li>
 <li>Depends on: Phase 0 decisions.</li>
 </ul>
 <h3>Phase 2: Data In and Consent (7 weeks, weeks 8–14)</h3>
@@ -716,7 +717,8 @@
 <li><strong>E02</strong> Shopify connector (3 stores) and Interactions SDK (3 storefronts) · <strong>E03</strong> partner files from MGA's Azure container · <strong>E04</strong> Klaviyo contacts, contact points, suppressions and Yotpo members. These three start together once E01 is done.</li>
 <li>Then <strong>E05</strong> brand subscriptions, preference center and privacy, once E02, E03 and E04 are all done.</li>
 <li>Then <strong>E17</strong> Klaviyo consent import into those subscriptions, before Shopify consent is mapped (load order G0407).</li>
-<li><strong>Done when:</strong> all sources ingest on schedule; the trial migration reconciles; subscriptions and the preference center work in the build sandbox; Klaviyo consent is imported and reconciled.</li>
+<li><strong>Identity on:</strong> once every source is imported, the identity ruleset is turned on for its first full run, and match thresholds are tuned with MGA on the full data before Phase 3.</li>
+<li><strong>Done when:</strong> all sources ingest on schedule; unified profiles resolve on the full data; the trial migration reconciles; subscriptions and the preference center work in the build sandbox; Klaviyo consent is imported and reconciled.</li>
 <li>Depends on: E01. MGA's web team deploys the SDK; MGA and vendors drop the partner files.</li>
 </ul>
 <h3>Phase 3: Deliverability and Journeys (8 weeks, weeks 15–22)</h3>
