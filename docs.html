@@ -195,7 +195,7 @@
 </nav>
 <main class="sz-wrap">
 <section id="exec" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Technical summary</h2><div class="sz-doc"><h1>MGA Entertainment: Technical Summary</h1>
-<p><strong>Klaviyo to Marketing Cloud Next and Data 360 for MGA Shop, Bratz and Little Tikes</strong> · 2026-10-13 · Audience: architects and delivery leads · Draft for review</p>
+<p><strong>Klaviyo to Marketing Cloud Next and Data 360 for MGA Shop, Bratz and Little Tikes</strong> · 2026-10-14 · Reduced scope · Audience: architects and delivery leads · Draft for review</p>
 <h2>At a Glance</h2>
 <ul>
 <li><strong>Current state:</strong> three Klaviyo accounts, one per Shopify storefront, with no shared customer view, separate opt-ins, and app data in Snapser that marketing can't reach.</li>
@@ -206,9 +206,9 @@
 </ul>
 <hr />
 <h2>Overview</h2>
-<p>MGA is consolidating three brand-level Klaviyo accounts into one Marketing Cloud Next org, so it can recognize one parent across MGA Shop, Bratz.com, LittleTikes.com and the Snapser apps. The build rebuilds 38 of the 39 Klaviyo flows, about 20 distinct patterns. It also adds a consent model that meets both COPPA and GDPR, ingests Shopify and partner data into Data 360, and migrates Klaviyo and Yotpo data once. MGA's target go-live is March 1, 2027. Klaviyo can run month to month if launch moves past that date.</p>
+<p>MGA is consolidating three brand-level Klaviyo accounts into one Marketing Cloud Next org, so it can recognize one parent across MGA Shop, Bratz.com, LittleTikes.com and the Snapser apps. Salesforce builds 8 of the 39 Klaviyo flows: abandoned cart for each brand, a welcome drip for each brand, and two loyalty program welcome emails. MGA builds the other 31 on the platform and data Salesforce delivers, with enablement from Salesforce. The build also adds a consent model that meets both COPPA and GDPR, ingests Shopify and partner data into Data 360, and migrates Klaviyo and Yotpo data once. MGA's target go-live is March 1, 2027. Klaviyo can run month to month if launch moves past that date.</p>
 <h2>Scope</h2>
-<p>Sixteen epics in four groups:</p>
+<p>Seventeen epics in four groups:</p>
 <table>
 <thead>
 <tr>
@@ -227,7 +227,7 @@
 </tr>
 <tr>
 <td>Engagement</td>
-<td>E07 Behavioral and commerce triggers · E08 Welcome and lifecycle · E09 Loyalty · E11 Segmentation and activation · E12 Agentforce for Marketing</td>
+<td>E07 Abandoned-cart flows (3) · E08 Welcome flows (3) · E09 Loyalty program welcome (2) · E11 Segmentation and activation · E12 Agentforce for Marketing · E18 MGA flow-build enablement</td>
 </tr>
 <tr>
 <td>Go-live</td>
@@ -235,12 +235,12 @@
 </tr>
 </tbody>
 </table>
-<p>There is no separate training epic. MGA's users take self-paced learning in Phase 0, and Salesforce hands over the configuration in E15.</p>
-<p><strong>Out of scope:</strong> Klaviyo engagement history; building ad-hoc and launch campaigns (MGA's marketing team builds these on delivered templates and segments); a move to TYB for loyalty; Circana; lawful-transfer paperwork for EU data.</p>
+<p>There is no separate training epic. MGA's users take self-paced learning in Phase 0, E18 enables MGA's flow builders in Phase 3, and Salesforce hands over the configuration in E15.</p>
+<p><strong>Out of scope:</strong> building, testing and cutting over the 31 MGA-built flows and their insights and audiences; the Little Tikes age-band tagging automations; Klaviyo engagement history; building ad-hoc and launch campaigns (MGA's marketing team builds these on delivered templates and segments); a move to TYB for loyalty; Circana; lawful-transfer paperwork for EU data.</p>
 <p><strong>MGA owns:</strong> change management and experience design; all copy and imagery (delivery recreates the current Klaviyo layouts); storefront sign-up forms in Shopify; SDK deployment on the storefronts; the Azure landing zone and the vendor file drops into it.</p>
 <h2>Solution Highlights</h2>
 <p><strong>Org model.</strong> One business unit and one data space, with the business-unit feature off. In Marketing Cloud Next each business unit maps one-to-one to a walled-off data space, so per-brand units would block the cross-brand profile and the shared opt-in. Brands are separated by sender profile, sending domain, SMS short code, master templates, subscription and a brand attribute. MGA accepts no data isolation between brands and one shared sending-IP reputation.</p>
-<p><strong>Identity.</strong> The default Data 360 ruleset (normalized email, device to known), plus match rules on the Shopify customer ID and Snapser app ID so that app-only and SMS-only parents join the profile. The ruleset is built in Phase 1 and turned on once all data is imported at the end of Phase 2, so matching is tuned on real data. Children are never contacts. A child's age band and birthday sit on the parent's profile, which replaces the four Little Tikes tagging automations.</p>
+<p><strong>Identity.</strong> The default Data 360 ruleset (normalized email, device to known), plus match rules on the Shopify customer ID and Snapser app ID so that app-only and SMS-only parents join the profile. The ruleset is built in Phase 1 and turned on once all data is imported at the end of Phase 2, so matching is tuned on real data. Children are never contacts. A child's age band and birthday sit on the parent's profile, which is the data MGA needs for its own age-band tagging.</p>
 <p><strong>Integration.</strong> All native connectors, with no middleware:
 - Shopify Connector, one connection per store, for customers, orders, history, catalog and inventory. Shopify is the catalog master.
 - Interactions SDK on the three storefronts for real-time browse, cart and checkout events. These SDK events are the only source for the abandonment triggers, which prevents duplicate sends from the connector's batch abandonment data.
@@ -248,11 +248,11 @@
 - Native activations: six paid-media audiences (TikTok and Instagram per brand), plus engagement and unsubscribe data to Azure.</p>
 <p><strong>Consent.</strong> Six brand-level subscriptions (three brands × email and SMS). The umbrella sign-up subscribes a parent to all three, and the preference center offers per-brand control and an unsubscribe-from-all. Every triggered flow runs the send-time consent check except loyalty redemption confirmation; all SMS is checked. The Consent Audit Trail records GDPR evidence, and Privacy Requests handle erasure and access across the org and Data 360.</p>
 <p><strong>Migration load order.</strong> Contacts first (E04), then Klaviyo consent (E17), then Shopify consent going forward. The consent import doesn't create contacts and skips rows older than the stored value, so loading Shopify first would override Klaviyo consent. Each consent file covers one channel, subscription and status, so files multiply by brand and channel.</p>
-<p><strong>Flows.</strong> About 20 patterns, each built once with brand variants. Abandonment, price drop, back-in-stock and low inventory use the native commerce triggers. Welcome flows are event-triggered. Lifecycle and date-based loyalty flows run on segment-based audience flows. Event-driven loyalty flows run on the Yotpo file data, with end-to-end latency set by the file drop interval.</p>
+<p><strong>Flows.</strong> Three patterns, each built once with brand variants: abandoned cart on the native commerce trigger, welcome drips event-triggered on sign-up, and loyalty program welcome on the Yotpo file data. Each flow gets its own calculated insight and entry audience. <strong>E18</strong> gives MGA's builders one reference insight, audience and flow, a playbook and Phase 3 working sessions; Salesforce doesn't build or test MGA's flows.</p>
 <p><strong>Agentforce.</strong> The standard campaign-from-brief action and Einstein segment creation, configured with brand guardrails. There are no custom agents.</p>
 <p><strong>Environments.</strong> A Developer Pro sandbox for build and a Partial Copy sandbox for user acceptance testing, with the email blackhole on. Data 360 metadata moves to production in a DevOps Data Kit, with objects deployed before the flows that use them. Connector credentials are re-authorized after each deployment.</p>
 <h2>Implementation Approach</h2>
-<p><strong>Planned program duration: 26 weeks</strong>, from Phase 0 through hypercare exit, including MGA review and sign-off time. The plan sits inside a benchmark-based range of 14–30 weeks. It lands after MGA's March 1, 2027 target, so Klaviyo runs month to month until cutover.</p>
+<p><strong>Planned program duration: 25 weeks</strong>, from Phase 0 through hypercare exit, including MGA review and sign-off time. The plan sits inside a benchmark-based range of 14–30 weeks. It lands after MGA's March 1, 2027 target, so Klaviyo runs month to month until cutover. Cutting flows shortened the plan by one week: the data and consent work sets the duration, and that work didn't change.</p>
 <blockquote>
 <p><em>This figure is benchmark-based, derived from the AI model's training data and general delivery patterns (not Salesforce-validated) — not a commitment. Final figures are confirmed through the applicable commercial agreement.</em></p>
 </blockquote>
@@ -277,15 +277,15 @@
 <td>E02 Shopify and SDK, E03 partner files, E04 contacts and suppressions; then E05 consent and preference center; then E17 Klaviyo consent import</td>
 </tr>
 <tr>
-<td>3. Deliverability and journeys (weeks 15–22)</td>
-<td>E06 domain authentication and 6-week warm-up, with E07–E09 flows alongside; E11 segments and activations, then E12 Agentforce</td>
+<td>3. Deliverability and journeys (weeks 15–21)</td>
+<td>E06 domain authentication and six-week warm-up, with the 8 E07–E09 flows alongside; E11 segments and activations, then E12 Agentforce; E18 MGA enablement</td>
 </tr>
 <tr>
-<td>4. Testing and cutover (weeks 23–24)</td>
-<td>E14 system testing and user acceptance testing, final loads, Klaviyo switch-off</td>
+<td>4. Testing and cutover (weeks 22–23)</td>
+<td>E14 testing of the 8 flows plus the data and consent MGA's flows rely on, final loads, cutover; Klaviyo off once MGA's flows are live</td>
 </tr>
 <tr>
-<td>5. Hypercare and knowledge transfer (weeks 25–26)</td>
+<td>5. Hypercare and knowledge transfer (weeks 24–25)</td>
 <td>E15 monitoring, triage, deliverability watch, configuration knowledge transfer, handover</td>
 </tr>
 <tr>
@@ -301,14 +301,15 @@
 - <strong>E06:</strong> warm-up can't start until consent is done, and it needs MGA to build the warm-up emails.</p>
 <p>Month-to-month Klaviyo makes either an all-brand or a brand-by-brand cutover workable. MGA chooses in Phase 0.</p>
 <h2>Effort Summary</h2>
-<p>Relative complexity across the 16 epics: five large (E01, E02, E05, E07, E14), five medium, five small and one extra-small (E16 SMS registration), none extra-large. The heaviest work is the data foundation, the Shopify integration, consent and the commerce-triggered flows.</p>
+<p>Relative complexity across the 17 epics: three large (E01, E02, E05), four medium, eight small and one extra-small, none extra-large. The heaviest work is the data foundation, the Shopify integration and consent, which is why the flow cut barely moves the calendar.</p>
 <p><strong>Disciplines:</strong>
 - Solution architecture for Marketing Cloud Next and the consent model
 - Technical architecture for Data 360 identity, integration and migration
 - Data 360 and Marketing Cloud Next configuration
 - Template development
 - Deliverability
-- Quality assurance across three brands and two channels</p>
+- Quality assurance across three brands and two channels
+- Enablement for MGA's flow builders</p>
 <p>The team shape is a senior onshore architecture core with an offshore build and test team, plus part-time deliverability.</p>
 <h2>Risks and Mitigations</h2>
 <table>
@@ -320,6 +321,11 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>MGA flow-build capacity unknown</td>
+<td>Klaviyo stays on until MGA's 31 flows are live</td>
+<td>MGA names its builders in Phase 0; E18 playbook and reference builds</td>
+</tr>
 <tr>
 <td>Shopify Connector still in beta at go-live</td>
 <td>Production runs under beta terms, or E02 grows to a custom Ingestion API build</td>
@@ -333,7 +339,7 @@
 <tr>
 <td>Copy and imagery late</td>
 <td>Flow build and testing stall</td>
-<td>Hand-off dates per flow wave agreed in Phase 0</td>
+<td>Hand-off dates per flow agreed in Phase 0</td>
 </tr>
 <tr>
 <td>Partner files not produced by MGA or vendors</td>
@@ -368,32 +374,33 @@
 </tbody>
 </table>
 <h2>Assumptions and Confidence</h2>
-<p>41% of epics and size estimates are confirmed, and 59% rest on stated assumptions. That's expected before Phase 0. Each assumed size has a written rationale, and eight epics have a named larger size if their assumption breaks. The load-bearing assumptions:
+<p>35% of epics and size estimates are confirmed, and 65% rest on stated assumptions. That's expected before Phase 0. Each assumed size has a written rationale, and seven epics have a named larger size if their assumption breaks. The load-bearing assumptions:
 - US hosting for EU data.
 - "GSRM (EU)" means GDPR.
 - MGA owns the Azure landing zone and file drops.
 - Little Tikes order confirmation stays in Shopify.
-- Yotpo remains the loyalty platform.</p>
-<p><strong>Four design decisions are open and decided in Phase 0:</strong>
+- Yotpo remains the loyalty platform.
+- MGA builds, tests and switches over its own 31 flows.</p>
+<p><strong>Three design decisions are open and decided in Phase 0:</strong>
 - how a Shopify checkout opt-in becomes subscription consent after cutover;
 - the advertising-consent rule for paid media;
-- the back-in-stock pattern (native trigger or an explicit notify-me list);
 - how bulk suppression lists are held in Marketing Cloud Next.</p>
 <h2>Next Steps</h2>
 <ol>
-<li><strong>Confirm Phase 0 participants.</strong> MGA names a product owner, privacy counsel, a data steward and the web team owner for the SDK.</li>
+<li><strong>Confirm Phase 0 participants.</strong> MGA names a product owner, privacy counsel, a data steward, the web team owner for the SDK, and the team that builds MGA's 31 flows.</li>
 <li><strong>Send pre-Phase 0 data requests.</strong> Record counts per Klaviyo account, a consent export sample with source and timestamp, identifiers per source, and holiday freeze dates.</li>
 <li><strong>Set the Shopify Connector fallback date</strong> with MGA legal and IT.</li>
 <li><strong>Submit SMS short-code registration</strong> in the first week of Phase 0, and start MGA's self-paced learning.</li>
-<li><strong>Lock copy and warm-up email hand-off dates</strong> per flow wave before Phase 1 ends.</li>
+<li><strong>Lock copy and warm-up email hand-off dates</strong> before Phase 1 ends.</li>
 </ol></div></section><section id="solution" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Solution</h2><div class="sz-doc"><h1>MGA Entertainment: Solution</h1>
-<p><strong>Marketing Cloud Next and Data 360 for MGA Shop, Bratz and Little Tikes</strong> · 2026-10-13 · Status: draft for solution-lead review</p>
+<p><strong>Marketing Cloud Next and Data 360 for MGA Shop, Bratz and Little Tikes</strong> · 2026-10-14 · Reduced scope (Revised Scope v2) · Status: draft for solution-lead review</p>
 <hr />
 <h2>What we're building</h2>
 <p>MGA moves three Klaviyo accounts onto one Marketing Cloud Next org on one Data 360 data space. The result:
 - <strong>One profile for each parent</strong> across the three Shopify stores and the Snapser apps.
 - <strong>One sign-up</strong> that subscribes a parent to all brands, with brand-level preferences and an unsubscribe-from-all.
-- <strong>38 rebuilt flows</strong>, built as shared patterns with brand variants.</p>
+- <strong>8 Salesforce-built flows</strong> (25 email and SMS touches), built as shared patterns with brand variants: 3 abandoned-cart flows, 3 welcome drips and 2 loyalty program welcome emails, each with its own calculated insight and entry audience.
+- <strong>Every data source loaded</strong> for the 31 flows MGA builds itself, plus enablement so MGA's team can build them (E18).</p>
 <p>Shopify is the commerce and catalog master. Partner systems deliver files to an Azure landing zone that MGA owns. Delivery recreates the existing email layouts, and MGA supplies all copy and imagery.</p>
 <p><strong>Phase 0 is a 3-week design phase</strong> (committed by the solution lead) that settles the open decisions before build. It covers:
 - consent and subscription design
@@ -403,7 +410,7 @@
 - flow specifications and the copy hand-off plan
 - Klaviyo contract and code-freeze dates
 - the Interactions SDK deployment owner and dates</p>
-<p>Two things also start in Phase 0. SMS short-code registration is submitted (E16), and MGA's marketing users complete self-paced Marketing Cloud Next learning so they're ready to build the warm-up emails in E06.</p>
+<p>Two things also start in Phase 0. SMS short-code registration is submitted (E16), and MGA's marketing users complete self-paced Marketing Cloud Next learning so they're ready to build the warm-up emails in E06 and, later, their own flows.</p>
 <p>The copy plan and flow specifications may finish in the first build sprint.</p>
 <h2>Architecture Foundations</h2>
 <p><strong>Org strategy.</strong> One Marketing Cloud Next org, one Data 360 data space, business-unit feature off.
@@ -453,9 +460,9 @@
   - Keep one active ruleset, since each ruleset consumes credits.
   - <em>Timing.</em> Build and test the ruleset on sample data in Phase 1 with automatic runs off, then turn it on once every source is imported at the end of Phase 2 (Shopify, partner files, Klaviyo contacts and consent). A ruleset's automatic runs can be disabled and the run kicked off manually. Unifying on partial data would mean re-tuning thresholds and re-checking segments once the rest lands; turning it on once the data is complete means one full run, threshold tuning with MGA on real data, then the daily schedule.
   - The threshold for shared family email addresses is a business call tested on sample data in Phase 0 (G0101, G0102).
-- <em>COPPA.</em> Children are never contacts (``). A child's age band and birthday are attributes on the parent's profile, which replaces the 4 Little Tikes tagging automations.
+- <em>COPPA.</em> Children are never contacts (``). A child's age band and birthday are attributes on the parent's profile, which is the data MGA needs if it rebuilds the 4 Little Tikes age-band tagging automations; those automations are out of Salesforce scope.
 - <em>Data graphs.</em> A profile graph on the unified individual is required for dynamic content and recommendations. A lookup graph serves the Shopify catalog to product blocks (E10).
-- <em>Calculated insights.</em> Expect consolidation from the inventory's 39 down toward the pattern count, because one insight serves every brand variant of a flow.</p>
+- <em>Calculated insights.</em> Salesforce builds the 8 insights for its own flows (one per flow). MGA builds the insights for its 31 flows, starting from the E18 reference build.</p>
 <h3>2. Shopify Commerce Integration (E02)</h3>
 <p><strong>Business context.</strong> Shopify runs the three storefronts and holds customers, orders and the product catalog.</p>
 <p><strong>Solution approach.</strong>
@@ -529,7 +536,7 @@
 <p><strong>Solution approach.</strong>
 - A sender profile and authenticated sending domain per brand.
 - A warm-up plan for each domain, run on emails MGA's marketing users build (they prepare through self-paced learning in Phase 0).
-- E06 starts when E05 is done. Warm-up is paced by the mailbox providers and takes 6 weeks in every delivery lane; AI tooling doesn't shorten it.
+- E06 starts when E05 is done. Warm-up is paced by the mailbox providers and takes six weeks in every delivery lane; AI tooling doesn't shorten it.
 - E07–E09 start with E06 and can't finish before it, so E06 is on the critical path.</p>
 <p><strong>Supporting architecture.</strong>
 - <em>IPs.</em> At about 2.2 million emails a month, MGA is below the volume that triggers automatic dedicated IPs. Early dedicated IPs go through the Account Executive.
@@ -548,37 +555,26 @@
 - <em>Data sources.</em> Templates bind to the profile data graph. Product blocks use repeaters on the catalog lookup graph.
 - <em>Event-triggered content.</em> These templates carry a single event data source, which can't be swapped after publish, so each event-triggered flow's template is built for its trigger.
 - <em>Client dependency.</em> MGA supplies all copy and imagery by agreed hand-off dates per flow wave. Late copy stops flow build and QA (G1002).</p>
-<h3>8. Welcome &amp; Lifecycle Flows (E08)</h3>
-<p><strong>Business context.</strong>
-- Three welcome series, one per brand.
-- MGA Shop post-purchase (new and returning customers) and win-back.
-- Four Little Tikes age-band automations.</p>
+<h3>8. Welcome Flows (E08)</h3>
+<p><strong>Business context.</strong> Three welcome drip series, one per brand (MGA Shop, Bratz, Little Tikes), about 6 email and SMS touches each (18 touches).</p>
 <p><strong>Solution approach.</strong>
-- Welcome series are Automation Event-Triggered Flows on sign-up.
-- Post-purchase and win-back run on order events and recurring segment-based Audience Flows.
-- The four age-band automations become calculated attributes and segments on the parent profile, not flows (``).</p>
-<p><strong>Supporting architecture.</strong> Standard configuration on the E01 foundation. Each pattern is built once with brand variants.</p>
+- Welcome series are Automation Event-Triggered Flows on sign-up, each with its own calculated insight and entry audience.
+- One pattern, built once with brand variants.</p>
+<p><strong>Out of Salesforce scope (MGA-built).</strong> MGA Shop post-purchase (new and returning customers) and win-back, and the 4 Little Tikes age-band tagging automations.</p>
+<p><strong>Supporting architecture.</strong> Standard configuration on the E01 foundation.</p>
 <h3>9. Behavioral &amp; Commerce-Triggered Flows (E07)</h3>
-<p><strong>Business context.</strong> 17 flows recover browse, cart and checkout abandonment and act on price and stock changes.</p>
-<p><strong>Solution approach.</strong> These run on the native Marketing Cloud Next commerce triggers:
-- abandoned cart and abandoned checkout
-- browse and site abandonment
-- price drop
-- back-in-stock and low inventory</p>
-<p>Trigger event data drives personalization and branch conditions.</p>
+<p><strong>Business context.</strong> Three abandoned-cart flows, one per brand: MGA Shop (email and SMS), Bratz (email and SMS) and Little Tikes (SMS only). Five touches in all.</p>
+<p><strong>Solution approach.</strong> One pattern on the native Marketing Cloud Next abandoned-cart trigger, with brand variants, each with its own calculated insight and entry audience. Trigger event data drives personalization and branch conditions.</p>
+<p><strong>Out of Salesforce scope (MGA-built).</strong> Abandoned checkout, browse and site abandonment, price drop, back-in-stock and low inventory. They run on the same Data 360 data Salesforce loads. The back-in-stock pattern question (G0706) moves to MGA's flow build.</p>
 <p><strong>Supporting architecture.</strong>
 - <em>Timing.</em> Abandonment triggers set an inactivity window (10 minutes to 7 days) and a job frequency. Event-triggered flows run about 15 minutes after the event. Per-flow delays get set in Phase 0 (G0702).
-- <em>Price drop.</em> The trigger compares current and previous Shopify price for products a shopper viewed. A markdown done as a Shopify discount won't fire it (G0705).
-- <em>Back-in-stock (🔴, G0706).</em> The native trigger targets shoppers by product interest within a lookback window. If MGA's Klaviyo flow is an explicit "notify me" list, it needs a storefront capture form and a custom event, which is a larger pattern.
-- <em>Low inventory.</em> Need to confirm whether the alert is a shopper urgency message or an internal merchandising alert (G0706).
-- <em>Audience reach.</em> Only shoppers tied to a known email or phone get messages (G0704).</p>
+- <em>Audience reach.</em> Only shoppers tied to a known email or phone get messages (G0704). Real-time cart events need the Interactions SDK on the storefronts (E02, G1402).</p>
 <h3>10. Loyalty Flows (E09)</h3>
-<p><strong>Business context.</strong> 11 Yotpo-driven flows: 7 for MGA Shop and 4 for Little Tikes.</p>
-<p><strong>Solution approach.</strong>
-- <em>Date-based flows</em> (birthday, anniversary, monthly and rewards reminders) are scheduled Audience Flows on segments.
-- <em>Event-driven flows</em> (redemption confirmation, refer-a-friend, program welcome) are Automation Event-Triggered Flows on the Yotpo file data (G0907).</p>
+<p><strong>Business context.</strong> Two Yotpo-driven loyalty program welcome emails, for MGA Shop and Little Tikes.</p>
+<p><strong>Solution approach.</strong> Automation Event-Triggered Flows on the Yotpo enrollment data in E03, each with its own calculated insight and entry audience.</p>
+<p><strong>Out of Salesforce scope (MGA-built).</strong> The other 9 loyalty flows: birthday, rewards and monthly reminders, redemption confirmation, refer-a-friend and anniversary. They run on the Yotpo data Salesforce loads.</p>
 <p><strong>Supporting architecture.</strong>
-- <em>Latency.</em> Redemption confirmation reaches the member after three steps: the Yotpo file drop, the 5-to-30-minute stream interval, and about 15 minutes of flow latency. If MGA needs it faster, a Yotpo webhook calling an On-Demand flow is the faster pattern and a change order.
+- <em>Latency.</em> Welcome reaches the member after the Yotpo file drop, the 5-to-30-minute stream interval and about 15 minutes of flow latency (G0907).
 - <em>Program structure.</em> Whether MGA Shop and Little Tikes share one Yotpo program changes the data model (G0905).
 - <em>Yotpo's own emails.</em> Any loyalty emails Yotpo sends today are switched off at cutover (G0902).
 - <em>Platform change.</em> A move to TYB is a change order (G0906).</p>
@@ -594,7 +590,8 @@
 - <em>Exports.</em> Engagement and unsubscribe data to the Azure target. Bazaarvoice outbound for review requests (assumed).</p>
 <p><strong>Supporting architecture.</strong>
 - <em>Paid-media consent (🔴, G1102).</em> Every activated segment carries an advertising-consent rule and a rule that excludes child records and child-directed audiences. Whether advertising consent piggybacks on the email or SMS opt-in, or is its own purpose, is MGA privacy's call. No source grounds the choice. Activations can't go live until it's settled.
-- <em>Segment refresh.</em> Activation-triggered work follows each segment's publishing schedule.</p>
+- <em>Segment refresh.</em> Activation-triggered work follows each segment's publishing schedule.
+- <em>MGA's flows.</em> Insights and audiences for the 31 MGA-built flows are MGA's (E18 enables them). E11 holds at M on the reusable segments and activations.</p>
 <h3>12. Agentforce for Marketing (E12)</h3>
 <p><strong>Business context.</strong> MGA's marketers build weekly launch campaigns themselves after go-live.</p>
 <p><strong>Solution approach.</strong> Configure the standard Create a Campaign From a Brief action and Einstein segment creation, with brand guardrails. There are no custom agents.
@@ -602,12 +599,12 @@
 - It creates a draft segment only when Einstein segment creation is enabled.</p>
 <p><strong>Supporting architecture.</strong> The org-level AI prerequisites must be enabled before the agent works (G1202).</p>
 <h3>14. Testing &amp; Cutover (E14)</h3>
-<p><strong>Business context.</strong> Klaviyo has to stay live until Marketing Cloud Next is proven, and cutover lands around the toy holiday peak.</p>
+<p><strong>Business context.</strong> Klaviyo has to stay live until Marketing Cloud Next is proven, and cutover lands around the toy holiday peak. Salesforce tests and cuts over its 8 flows; MGA tests and switches over its own 31.</p>
 <p><strong>Solution approach.</strong>
-- <em>QA.</em> Across three brands and two channels: rendering, consent checks, triggers and data.
+- <em>QA.</em> The 8 Salesforce flows across three brands and two channels (rendering, consent checks, triggers), plus the data, identity, migration and consent-check testing MGA's flows rely on.
 - <em>Parallel run.</em> Klaviyo and Marketing Cloud Next run side by side.
 - <em>Final loads.</em> Final Klaviyo and Yotpo loads, and a final consent delta (E17).
-- <em>Cutover.</em> Sequenced cutover and Klaviyo decommission. Domain warm-up is done in E06, before this epic.
+- <em>Cutover.</em> Sequenced cutover of the 8 Salesforce flows. Klaviyo decommission waits until MGA's own flows are live. Domain warm-up is done in E06, before this epic.
 - <em>After go-live.</em> Hypercare is its own epic (E15).</p>
 <p><strong>Supporting architecture.</strong>
 - <em>Test environment.</em> User acceptance testing runs in the Partial Copy sandbox with the email blackhole on.
@@ -615,13 +612,21 @@
 <h3>15. Post-Go-Live Hypercare &amp; Knowledge Transfer (E15)</h3>
 <p><strong>Business context.</strong> Three brands go live at once on new sending domains, and the first weeks show whether trigger timing and segments work on real traffic.</p>
 <p><strong>Solution approach.</strong> Two weeks of hypercare after go-live (committed by the solution lead):
-- daily health checks on flow runs, triggers, data streams and consent checks
+- daily health checks on the 8 Salesforce flow runs, triggers, data streams and consent checks
 - triage and fixes for production defects
 - a deliverability watch on the three domains
 - tuning of trigger timing and segments
 - final configuration knowledge transfer to MGA's team</p>
 <p>It ends with a handover checklist signed by MGA. New requests during hypercare are change requests (G1501).</p>
 <p><strong>Supporting architecture.</strong> Standard operational support. Connector re-authorization after the production deployment is checked on day one.</p>
+<h3>16. MGA Flow-Build Enablement (E18)</h3>
+<p><strong>Business context.</strong> MGA builds 31 flows plus their Data 360 insights and audiences on the platform Salesforce delivers. Its team needs a working pattern to copy, not just training.</p>
+<p><strong>Solution approach.</strong> Light enablement in Phase 3, led by the Solution Architect:
+- one reference build each of a calculated insight, an audience and a flow, taken from the Salesforce-built patterns
+- a flow-build playbook: pattern, consent check, brand variant and test steps
+- working sessions with MGA's builders during Phase 3</p>
+<p>Salesforce doesn't build, test or cut over MGA's flows. If MGA wants hands-on co-build across several weeks, E18 goes from S to M.</p>
+<p><strong>Supporting architecture.</strong> Reference builds reuse the E07–E09 patterns, so the consent check and brand-variant approach match what Salesforce ships.</p>
 <hr />
 <h2>Key risks to the design</h2>
 <table>
@@ -639,9 +644,14 @@
 <td>Production on Beta Services Terms, or a late switch to a custom Ingestion API build (G0201)</td>
 </tr>
 <tr>
+<td>MGA flow-build capacity</td>
+<td>E14, E18</td>
+<td>MGA's 31 flows are unsized; Klaviyo stays on until they're live</td>
+</tr>
+<tr>
 <td>SDK deployment during code freeze</td>
 <td>E02, E07</td>
-<td>Abandonment flows can't be tested until MGA's web team ships the SDK (G0207)</td>
+<td>Abandoned-cart flows can't be tested until MGA's web team ships the SDK (G0207)</td>
 </tr>
 <tr>
 <td>Copy and imagery late</td>
@@ -681,29 +691,30 @@
 </tbody>
 </table>
 <h2>Open design questions for Phase 0</h2>
-<p>These are the 🔴 forks with no grounding source: G0504 (Shopify consent after cutover), G1102 (paid-media consent), G0706 (back-in-stock pattern) and G0402 (suppression import). The identity thresholds (G0101, G0102) and per-flow timing (G0702) also go into Phase 0. The full list is on the scope page.</p></div></section><section id="delivery" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Delivery plan</h2><div class="sz-doc"><h1>MGA Entertainment: Delivery Plan</h1>
-<p><strong>Klaviyo to Marketing Cloud Next and Data 360</strong> · 2026-10-13 · Status: draft for solution-lead review</p>
-<p><strong>Total program duration: 26 weeks (per user commitment).</strong> Wall-clock elapsed, Phase 0 through hypercare exit, including MGA review and sign-off time. The Solution Lead committed 26 weeks inside the benchmark-based range of 14–30 weeks (top-down from engagement shape: Multi-Cloud + Data Integration / Medium, 16–24 weeks, widened for regulated data and assumption density).</p>
+<p>These are the 🔴 forks with no grounding source in Salesforce scope: G0504 (Shopify consent after cutover), G1102 (paid-media consent) and G0402 (suppression import). The identity thresholds (G0101, G0102) and per-flow timing (G0702) also go into Phase 0. The full list is on the scope page.</p></div></section><section id="delivery" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Delivery plan</h2><div class="sz-doc"><h1>MGA Entertainment: Delivery Plan (Reduced Scope)</h1>
+<p><strong>Klaviyo to Marketing Cloud Next and Data 360</strong> · 2026-10-14 · Status: draft for solution-lead review</p>
+<p><strong>Total program duration: 25 weeks (per user commitment).</strong> Wall-clock elapsed, Phase 0 through hypercare exit, including MGA review and sign-off time. The Solution Lead committed 25 weeks inside the benchmark-based range of 14–30 weeks (top-down from engagement shape: Multi-Cloud + Data Integration / Medium, 16–24 weeks, widened for regulated data and assumption density).</p>
 <blockquote>
 <p><em>This figure is benchmark-based, derived from the AI model's training data and general delivery patterns (not Salesforce-validated) — not a commitment. Final figures are confirmed through the applicable commercial agreement.</em></p>
 </blockquote>
+<p><strong>What changed from the full scope.</strong> Salesforce now builds 8 of MGA's 39 Klaviyo flows (25 email and SMS touches): 3 abandoned-cart flows, 3 welcome drips and 2 loyalty program welcome emails, with one calculated insight and one entry audience each. MGA builds, tests and switches over the other 31 flows and their insights and audiences. Salesforce still loads every data source those flows run on, and enables MGA's builders (new E18). The 4 Little Tikes age-band tagging automations are out of scope. Hours drop much more than weeks: the data foundation and consent work (E01–E05) set the duration, and that work is unchanged.</p>
 <p><strong>How the range was built</strong>
-- <strong>Baseline 16–24 weeks.</strong> Sixteen epics (5 L, 5 M, 5 S, 1 XS, no XL) across Marketing Cloud Next (MC Next) and Data 360 match the Multi-Cloud + Data Integration / Medium row. The epic count runs above that row's typical range, but six of them are small or extra-small.
+- <strong>Baseline 16–24 weeks.</strong> Seventeen epics (3 L, 4 M, 8 S, 1 XS, no XL) across Marketing Cloud Next (MC Next) and Data 360 match the Multi-Cloud + Data Integration / Medium row.
 - <strong>+15% for regulated data.</strong> GDPR consent evidence and audit trail, plus COPPA, apply (E05).
-- <strong>±10% for confidence.</strong> 27 of 98 open items are working assumptions, and eight epics carry a larger size if one breaks.</p>
+- <strong>±10% for confidence.</strong> 27 of 98 open items are working assumptions, and seven epics carry a larger size if one breaks.</p>
 <p><strong>What sets the high end</strong>
 - <strong>E02, Shopify integration.</strong> The connector is in beta. A fallback to a custom Ingestion API build would push E02 to XL. <em>Tighten with:</em> MGA's decision on the Beta Services Terms and a fallback date (G0201).
 - <strong>E01, unified profile.</strong> Volumes and identity rules are unknown. <em>Tighten with:</em> identifiers per source and record counts per Klaviyo account (G0101, G0103).
-- <strong>E07, triggered flows.</strong> The back-in-stock pattern isn't decided. <em>Tighten with:</em> the Phase 0 decision on G0706.</p>
-<p><strong>Against the client target.</strong> MGA's March 1, 2027 date is about 20 weeks from today, before contracting and Phase 0. The 26-week plan lands about 6 weeks or more past it. MGA can extend Klaviyo month to month if launch slips (G1401), so March 1 is a target, not a hard deadline. Use that flex to plan, not as a buffer we spend by default.</p>
+- <strong>E07, abandoned-cart flows.</strong> Reach depends on storefront cart events from the Interactions SDK on 3 storefronts. <em>Tighten with:</em> the SDK deployment window around the holiday freeze (G1402).</p>
+<p><strong>Against the client target.</strong> MGA's March 1, 2027 date is about 20 weeks from today, before contracting and Phase 0. The 25-week plan lands about five weeks or more past it. MGA can extend Klaviyo month to month if launch slips (G1401), so March 1 is a target, not a hard deadline. Klaviyo can only be switched off once MGA's own 31 flows are live too.</p>
 <hr />
 <h2>Phases</h2>
-<p>Phases run in sequence, with one parallel track. Phase 0 (3 weeks) and hypercare (2 weeks) were set by the Solution Lead; the remaining 21 weeks are split across the build phases by T-shirt points. Two pieces of work are paced by outside parties and don't compress in any delivery lane: SMS short-code approval (carriers, 12 weeks) and domain warm-up (mailbox providers, 6 weeks).</p>
+<p>Phases run in sequence, with one parallel track. Phase 0 (3 weeks), testing and cutover (2 weeks) and hypercare (2 weeks) were set by the Solution Lead; the remaining 18 weeks are split across the build phases by T-shirt points. Two pieces of work are paced by outside parties and don't compress in any delivery lane: SMS short-code approval (carriers, 12 weeks) and domain warm-up (mailbox providers, six weeks).</p>
 <h3>Phase 0: Design (3 weeks, weeks 1–3)</h3>
 <ul>
-<li><strong>Settles:</strong> the four open design decisions (Shopify consent after cutover G0504, paid-media consent G1102, back-in-stock pattern G0706, suppression import G0402), identity rules, partner file specs, flow specs, and the copy hand-off plan per flow wave.</li>
-<li><strong>Starts:</strong> SMS short-code registration for 3 brands (E16, parallel track). MGA's marketing users take self-paced Marketing Cloud Next learning, so they're ready to build the warm-up emails in E06.</li>
-<li><strong>Learns:</strong> holiday code-freeze dates (G1402), the beta-connector fallback date (G0201), and MGA's cutover approach (all brands or brand by brand).</li>
+<li><strong>Settles:</strong> the open design decisions (Shopify consent after cutover G0504, paid-media consent G1102, suppression import G0402), identity rules, partner file specs, specs for the 8 Salesforce flows, and the copy hand-off plan.</li>
+<li><strong>Starts:</strong> SMS short-code registration for 3 brands (E16, parallel track). MGA's marketing users take self-paced Marketing Cloud Next learning, so they're ready to build the warm-up emails in E06 and their own flows in Phase 3.</li>
+<li><strong>Learns:</strong> holiday code-freeze dates (G1402), the beta-connector fallback date (G0201), MGA's cutover approach (all brands or brand by brand), and who on MGA's side builds the 31 MGA flows.</li>
 <li><strong>Done when:</strong> decisions logged and signed off by MGA; registration submitted; self-paced learning complete.</li>
 </ul>
 <h3>Phase 1: Foundation (4 weeks, weeks 4–7)</h3>
@@ -721,39 +732,40 @@
 <li><strong>Done when:</strong> all sources ingest on schedule; unified profiles resolve on the full data; the trial migration reconciles; subscriptions and the preference center work in the build sandbox; Klaviyo consent is imported and reconciled.</li>
 <li>Depends on: E01. MGA's web team deploys the SDK; MGA and vendors drop the partner files.</li>
 </ul>
-<h3>Phase 3: Deliverability and Journeys (8 weeks, weeks 15–22)</h3>
+<h3>Phase 3: Deliverability and Journeys (7 weeks, weeks 15–21)</h3>
 <ul>
-<li><strong>E06</strong> email deliverability: sender profiles, authentication and warm-up for 3 domains, with MGA building the warm-up emails. Warm-up takes 6 weeks and sets the floor for this phase.</li>
-<li><strong>E07</strong> behavioral and commerce triggers · <strong>E08</strong> welcome and lifecycle · <strong>E09</strong> loyalty on Yotpo. They start with E06 and can't finish before it. 38 flows built as shared patterns with brand variants.</li>
-<li><strong>E11</strong> segments, calculated insights and 6 paid-media activations, then <strong>E12</strong> Agentforce campaign brief and segment creation.</li>
-<li><strong>Done when:</strong> domains are authenticated and warmed up; flows are built and tested per brand with MGA copy loaded; activations run in the sandbox; Agentforce actions run with brand guardrails.</li>
-<li>Depends on: E05 (E06, E11); E16 approval at week 12 (E07–E09); E02, E10 (flows); E03 (loyalty); E11 (Agentforce).</li>
+<li><strong>E06</strong> email deliverability: sender profiles, authentication and warm-up for 3 domains, with MGA building the warm-up emails. Warm-up takes six weeks and sets the floor for this phase.</li>
+<li><strong>E07</strong> 3 abandoned-cart flows · <strong>E08</strong> 3 welcome drips · <strong>E09</strong> 2 loyalty program welcome emails. Each flow gets its own calculated insight and entry audience. They start with E06 and can't finish before it.</li>
+<li><strong>E11</strong> segments and 6 paid-media activations, then <strong>E12</strong> Agentforce campaign brief and segment creation.</li>
+<li><strong>E18</strong> MGA flow-build enablement: one reference build each of a calculated insight, an audience and a flow, a flow-build playbook, and working sessions with MGA's builders.</li>
+<li><strong>Done when:</strong> domains are authenticated and warmed up; the 8 flows are built and tested per brand with MGA copy loaded; activations run in the sandbox; Agentforce actions run with brand guardrails; the playbook and reference builds are handed to MGA.</li>
+<li>Depends on: E05 (E06, E11); E16 approval at week 12 (E07–E09); E02, E10 (flows); E03 (loyalty); E11 (Agentforce); E07–E09 (E18 reference builds).</li>
 </ul>
-<h3>Phase 4: Testing and Cutover (2 weeks, weeks 23–24)</h3>
+<h3>Phase 4: Testing and Cutover (2 weeks, weeks 22–23)</h3>
 <ul>
-<li><strong>E14</strong>: system and user acceptance testing in the Partial Copy sandbox, production deployment, final Klaviyo and Yotpo loads with a final consent delta (E17), Klaviyo switch-off. Domain warm-up is finished in E06 before this phase.</li>
-<li>Month-to-month Klaviyo makes a brand-by-brand cutover possible. MGA chooses in Phase 0.</li>
-<li>Held at 2 weeks in every delivery lane (Solution Lead). AI tooling doesn't shorten testing across 3 brands × email and SMS.</li>
+<li><strong>E14</strong>: system and user acceptance testing of the 8 Salesforce flows in the Partial Copy sandbox, plus the data, identity, migration and consent-check testing MGA's flows rely on; production deployment; final Klaviyo and Yotpo loads with a final consent delta (E17).</li>
+<li>MGA tests and switches over its own 31 flows. Klaviyo is switched off once those are live, which may come after this phase.</li>
+<li>Held at 2 weeks in every delivery lane (Solution Lead).</li>
 <li>Depends on: E04, E07, E08, E09, E17.</li>
 </ul>
-<h3>Phase 5: Hypercare and Knowledge Transfer (2 weeks, weeks 25–26)</h3>
+<h3>Phase 5: Hypercare and Knowledge Transfer (2 weeks, weeks 24–25)</h3>
 <ul>
-<li><strong>E15</strong>: monitoring, defect triage, deliverability watch on 3 domains, tuning, then final configuration knowledge transfer and handover.</li>
+<li><strong>E15</strong>: monitoring of the 8 Salesforce flows, data streams and consent checks; defect triage; deliverability watch on 3 domains; tuning; then final configuration knowledge transfer and handover.</li>
 <li><strong>Done when:</strong> exit criteria are met, configuration knowledge transfer is complete, and MGA's owner is in place on day 15 (G1501).</li>
 </ul>
 <h3>Parallel track: SMS Short-Code Registration (12 weeks, weeks 1–12)</h3>
 <ul>
 <li><strong>E16</strong>: carrier approval of 3 short codes, submitted in Phase 0. Must be approved before Phase 3 starts.</li>
 </ul>
-<p><strong>Critical path:</strong> E01 → E02 / E03 / E04 → E05 → E06 (with E07–E09) → E14 → E15. Slippage on any one cascades. E16 isn't on the path at 12 weeks, but a carrier delay past week 14 pushes Phase 3. The SDK deployment inside E02 sits with MGA's web team during the holiday peak.</p>
+<p><strong>Critical path:</strong> E01 → E02 / E03 / E04 → E05 → E06 (with E07–E09) → E14 → E15. Slippage on any one cascades. E16 isn't on the path at 12 weeks, but a carrier delay past week 14 pushes Phase 3. The SDK deployment inside E02 sits with MGA's web team during the holiday peak. Klaviyo switch-off also depends on MGA finishing its own flows, which sits outside this plan.</p>
 <hr />
 <h2>Standard processes (all phases)</h2>
 <ul>
 <li><strong>Environments:</strong> build in a Developer Pro sandbox, UAT in a Partial Copy sandbox with the email blackhole on; Data 360 metadata promoted with the DevOps Data Kit, objects deployed before the flows that use them.</li>
-<li><strong>Testing:</strong> unit tests per flow pattern and brand variant in Phase 3; system and UAT in Phase 4; seed-list and rendering checks for email and SMS on all 3 brands.</li>
+<li><strong>Testing:</strong> unit tests per flow and brand variant in Phase 3; system and UAT in Phase 4; seed-list and rendering checks for email and SMS on all 3 brands.</li>
 <li><strong>Deployment:</strong> release per phase into UAT; one production cutover (or one per brand if MGA chooses).</li>
-<li><strong>Enablement:</strong> MGA's users take self-paced learning in Phase 0 and build the warm-up emails in Phase 3; Salesforce delivers final configuration knowledge transfer in E15. There's no delivery-run training epic.</li>
-<li><strong>Client hand-offs:</strong> decisions, DNS, SDK deployment, partner files, warm-up emails, copy and imagery, UAT sign-off. Dates are set in Phase 0.</li>
+<li><strong>Enablement:</strong> MGA's users take self-paced learning in Phase 0; E18 enables MGA's flow builders in Phase 3; Salesforce delivers final configuration knowledge transfer in E15.</li>
+<li><strong>Client hand-offs:</strong> decisions, DNS, SDK deployment, partner files, warm-up emails, copy and imagery, UAT sign-off, and MGA's own flow build. Dates are set in Phase 0.</li>
 </ul>
 <h2>Risks</h2>
 <table>
@@ -767,9 +779,15 @@
 </thead>
 <tbody>
 <tr>
+<td>MGA build capacity for its 31 flows is unknown</td>
+<td>3–5</td>
+<td>Klaviyo stays on, or MGA's flows go live untested</td>
+<td>Name MGA's builders in Phase 0; E18 playbook and reference builds; MGA sets its own flow plan</td>
+</tr>
+<tr>
 <td>Holiday code freeze blocks SDK deployment (G1402)</td>
 <td>2</td>
-<td>Real-time abandonment flows slip</td>
+<td>Abandoned-cart flows slip</td>
 <td>Get freeze dates in Phase 0; deploy the SDK before the freeze or plan around it</td>
 </tr>
 <tr>
@@ -800,7 +818,7 @@
 <td>Copy and imagery late (MGA-owned)</td>
 <td>3</td>
 <td>Flows can't finish testing</td>
-<td>Hand-off dates per flow wave agreed in Phase 0</td>
+<td>Hand-off dates per flow agreed in Phase 0</td>
 </tr>
 <tr>
 <td>Identity rules and volumes unknown (G0101, G0103)</td>
@@ -822,12 +840,13 @@
 </tr>
 </tbody>
 </table>
-<hr /></div></section><section id="efficiency" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">AI delivery efficiency</h2><div class="sz-doc"><h1>AI Delivery Efficiency Analysis — MGA Entertainment MC Next 2026</h1>
+<hr /></div></section><section id="efficiency" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">AI delivery efficiency</h2><div class="sz-doc"><h1>AI Delivery Efficiency Analysis — MGA Entertainment MC Next 2026 (Reduced Scope)</h1>
+<p><em>Updated 2026-10-14 for the reduced scope. The bands are unchanged: the cut removes flow volume, which shifts hours, not the project-level mix that sets the realized band.</em></p>
 <h2>So What</h2>
 <p><strong>~10–21% realized delivery efficiency at Mid readiness.</strong> A pace and quality lift within the same team shape — not headcount reduction, not a pricing input.</p>
 <p>Where the gains show up on this project:
 - <strong>Documentation &amp; Knowledge Management</strong> (~10–23%): Phase 0 specs, consent evidence and the knowledge-transfer material (E05, E15) draft fast; privacy review caps it.
-- <strong>Analysis &amp; Design</strong> (~8–21%): about 20 flow patterns with brand variants (E07, E08, E09) and the segment model (E11).
+- <strong>Analysis &amp; Design</strong> (~8–21%): the 8 Salesforce flows as 3 patterns with brand variants (E07, E08, E09), the segment model (E11) and the E18 playbook.
 - <strong>Technical Engineering &amp; QA</strong> (~7–18%): test data and cases across 3 brands × email and SMS (E14); the beta connector and identity rules carry the most review overhead.</p>
 <p><strong>Where AI does not help</strong>: privacy sign-off on consent rules, holiday code-freeze and cutover decisions, MGA's copy, SMS registration (E16) and domain warm-up (E06) lead times — plus the beta Shopify connector and identity-resolution work in E01 and E02.</p>
 <p><strong>To move up to High readiness (~12–25%)</strong>: approved AI tools in the build team's environments, a published AI data-handling policy from MGA's privacy team, a weekly decision forum through the holiday peak.</p>
@@ -884,17 +903,17 @@
 </ul>
 <h3>Analysis &amp; Design — realized ~8–21% (task-level ~25–45%)</h3>
 <ul>
-<li><strong>Driving epics</strong>: E01 (L), E07 (L), E08 (M), E09 (M), E11 (M)</li>
-<li><strong>How it shows up here</strong>: 38 flows reduce to about 20 patterns with brand variants, which suits drafted specs and segment and calculated-insight models [2]. Identity rules and MGA sign-off on each pattern stay human-paced.</li>
+<li><strong>Driving epics</strong>: E01 (L), E07 (S), E08 (S), E09 (XS), E11 (M), E18 (S)</li>
+<li><strong>How it shows up here</strong>: Salesforce builds 8 flows as 3 patterns with brand variants, plus a playbook MGA reuses for its own 31; that suits drafted specs and segment and calculated-insight models [2]. Identity rules and MGA sign-off on each pattern stay human-paced.</li>
 </ul>
 <h3>Technical Engineering &amp; QA — realized ~7–18% (task-level ~20–40%)</h3>
 <ul>
-<li><strong>Driving epics</strong>: E02 (L), E03 (M), E04 (M), E14 (L)</li>
+<li><strong>Driving epics</strong>: E02 (L), E03 (M), E04 (S), E14 (M)</li>
 <li><strong>How it shows up here</strong>: test data and test cases across 3 brands × email and SMS, migration mapping and SDK and file mapping benefit [3][11]. The beta Shopify connector and identity resolution sit outside the frontier, where review overhead is largest [5][8].</li>
 </ul>
 <h3>Project Management &amp; Operations — realized ~3–14% (task-level ~10–30%)</h3>
 <ul>
-<li><strong>Driving epics</strong>: E14 (L), E15 (S)</li>
+<li><strong>Driving epics</strong>: E14 (M), E15 (S), E18 (S)</li>
 <li><strong>How it shows up here</strong>: status reports and meeting notes compress [7]. Coordinating three brands, MGA's web team and partner vendors through the holiday peak stays human.</li>
 </ul>
 <h2>By Role Type</h2>
@@ -902,7 +921,7 @@
 <ul>
 <li><strong>Amplified</strong>: flow-pattern and variant specs, segment and calculated-insight models, configuration documentation, knowledge transfer [2][7][11]</li>
 <li><strong>Still human-only</strong>: brand SME sign-off on each pattern and variant; SMS short-code registration lead time</li>
-<li><strong>How the day changes</strong>: about 20 flow patterns × 3 brand variants are well suited to drafted specs; the consultant spends more time verifying variants than writing them.</li>
+<li><strong>How the day changes</strong>: 3 flow patterns × brand variants and the E18 reference builds are well suited to drafted specs; the consultant spends more time verifying variants than writing them.</li>
 </ul>
 <h3>Quality Assurance — realized ~8–21% (task-level ~25–45%)</h3>
 <ul>
