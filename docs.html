@@ -274,11 +274,11 @@
 </tr>
 <tr>
 <td>2. Data in and consent (weeks 8–14)</td>
-<td>E02 Shopify and SDK, E03 partner files, E04 contacts and suppressions; then E05 consent and preference center; then E17 Klaviyo consent import</td>
+<td>E02 Shopify and SDK, E03 partner files, E04 contacts and suppressions; then E05 consent and preference center; then E17 Klaviyo consent import, engaged group first; E06 domain authentication, and warm-up starts on that first load</td>
 </tr>
 <tr>
 <td>3. Deliverability and journeys (weeks 15–21)</td>
-<td>E06 domain authentication and six-week warm-up, with the 8 E07–E09 flows alongside; E11 segments and activations, then E12 Agentforce; E18 MGA enablement</td>
+<td>E06 six-week warm-up finishes, then one full Klaviyo consent refresh (opt-out wins); the 8 E07–E09 flows; E11 segments and activations, then E12 Agentforce; E18 MGA enablement</td>
 </tr>
 <tr>
 <td>4. Testing and cutover (weeks 22–23)</td>
@@ -295,10 +295,10 @@
 </tbody>
 </table>
 <p>Carriers set the pace of SMS approval and mailbox providers set the pace of warm-up, so neither shortens in any delivery model.</p>
-<p><strong>Critical path:</strong> E01 → E02 / E03 / E04 → E05 → E06 (with E07–E09) → E14 → E15. Three epics carry the most schedule risk:
+<p><strong>Critical path:</strong> E01 → E02 / E03 / E04 → E05 → E17 / E06 warm-up → E07–E09 → E14 → E15. Three epics carry the most schedule risk:
 - <strong>E02:</strong> a fallback from the beta connector to a custom build.
 - <strong>E01:</strong> unknown identity volumes.
-- <strong>E06:</strong> warm-up can't start until consent is done, and it needs MGA to build the warm-up emails.</p>
+- <strong>E06:</strong> warm-up starts with the Klaviyo consent import, so it needs MGA's warm-up emails ready late in Phase 2. Until warm-up ends we recommend unsubscribe links point to Klaviyo, with Klaviyo unsubscribes loaded into Data 360 every day.</p>
 <p>Month-to-month Klaviyo makes either an all-brand or a brand-by-brand cutover workable. MGA chooses in Phase 0.</p>
 <h2>Effort Summary</h2>
 <p>Relative complexity across the 17 epics: three large (E01, E02, E05), four medium, eight small and one extra-small, none extra-large. The heaviest work is the data foundation, the Shopify integration and consent, which is why the flow cut barely moves the calendar.</p>
@@ -369,7 +369,12 @@
 <tr>
 <td>MGA not ready to build warm-up emails</td>
 <td>E06 slips, and go-live with it</td>
-<td>Self-paced learning in Phase 0; a named content owner before Phase 3</td>
+<td>Self-paced learning in Phase 0; a named content owner in Phase 1</td>
+</tr>
+<tr>
+<td>Daily Klaviyo unsubscribe load missed during warm-up</td>
+<td>Mail goes to people who opted out; complaints and blocking</td>
+<td>Named owner and a daily check; opt-out wins on the full refresh</td>
 </tr>
 </tbody>
 </table>
@@ -410,7 +415,7 @@
 - flow specifications and the copy hand-off plan
 - Klaviyo contract and code-freeze dates
 - the Interactions SDK deployment owner and dates</p>
-<p>Two things also start in Phase 0. SMS short-code registration is submitted (E16), and MGA's marketing users complete self-paced Marketing Cloud Next learning so they're ready to build the warm-up emails in E06 and, later, their own flows.</p>
+<p>Two things also start in Phase 0. SMS short-code registration is submitted (E16), and MGA's marketing users complete self-paced Marketing Cloud Next learning so they're ready to build the warm-up emails in E06 (needed late in Phase 2) and, later, their own flows.</p>
 <p>The copy plan and flow specifications may finish in the first build sprint.</p>
 <h2>Architecture Foundations</h2>
 <p><strong>Org strategy.</strong> One Marketing Cloud Next org, one Data 360 data space, business-unit feature off.
@@ -508,11 +513,15 @@
 <p><strong>Supporting architecture.</strong>
 - <em>Contacts first.</em> Create contacts and contact points for every Klaviyo subscriber not already in Shopify. Consent import doesn't create contacts, so this has to land before E17.
 - <em>Missing consent.</em> A record with no consent value is treated as opted out.
-- <em>Suppressions.</em> Import hard bounces and complaints so they're never mailed, and before warm-up starts in E06. How Marketing Cloud Next holds a bulk bounce or complaint suppression list isn't confirmed in the sources checked (G0402, 🔴).
+- <em>Suppressions.</em> Import hard bounces and complaints so they're never mailed, and before E17's first load starts warm-up in E06. How Marketing Cloud Next holds a bulk bounce or complaint suppression list isn't confirmed in the sources checked (G0402, 🔴).
 - <em>Size.</em> S, rising to M if the suppression pattern (G0402) needs a custom build.</p>
 <h3>4a. Klaviyo Consent Import (E17)</h3>
 <p><strong>Business context.</strong> "Klaviyo wins" on consent at cutover: a parent's existing opt-ins and opt-outs carry over exactly.</p>
-<p><strong>Solution approach.</strong> Import Klaviyo consent by channel into the brand subscriptions built in E05, after the E04 contacts exist. Reconcile it, then run a final delta in E14 at cutover.</p>
+<p><strong>Solution approach.</strong> Import Klaviyo consent by channel into the brand subscriptions built in E05, after the E04 contacts exist, in three steps (``):
+1. <em>Engaged group first.</em> The first load is the engaged group, so E06 warm-up can start on it.
+2. <em>Daily delta.</em> Klaviyo unsubscribes load every day while warm-up runs (G0610).
+3. <em>Full refresh.</em> When warm-up is complete, one full Klaviyo consent refresh loads. An opt-out recorded in either system wins, so the refresh never re-subscribes someone who opted out in MC Next.</p>
+<p>Each load is reconciled; a final delta runs in E14 at cutover.</p>
 <p><strong>Supporting architecture.</strong>
 - <em>Load order is load-bearing</em> (G0407): E04 contacts, then E17 Klaviyo consent, then Shopify consent mapping going forward. The import skips any row whose consent date is older than the one stored, so loading Shopify first would quietly defeat the "Klaviyo wins" rule (G0404).
 - <em>File count.</em> Each consent import covers one channel, one subscription and one status, so the files multiply: per brand, per channel, per status, with an SMS sender code on each SMS file.
@@ -536,8 +545,9 @@
 <p><strong>Solution approach.</strong>
 - A sender profile and authenticated sending domain per brand.
 - A warm-up plan for each domain, run on emails MGA's marketing users build (they prepare through self-paced learning in Phase 0).
-- E06 starts when E05 is done. Warm-up is paced by the mailbox providers and takes six weeks in every delivery lane; AI tooling doesn't shorten it.
-- E07–E09 start with E06 and can't finish before it, so E06 is on the critical path.</p>
+- Sender profiles and domain authentication are set up in Phase 2. Warm-up starts with E17's first load (the engaged group) at the end of Phase 2 and runs into Phase 3 (``). Warm-up starts with the most engaged recipients. It is paced by the mailbox providers and takes six weeks in every delivery lane; AI tooling doesn't shorten it.
+- <em>Unsubscribes during warm-up.</em> We recommend Klaviyo stays the main record of unsubscribes until warm-up ends: the unsubscribe link in the body of warm-up emails points to the brand's Klaviyo page (G0609). Gmail and Yahoo also show their own one-click unsubscribe, which MC Next processes, and they expect unsubscribes handled within two days, so Klaviyo unsubscribes load into Data 360 every day (G0610).
+- E07–E09 can't finish before warm-up does.</p>
 <p><strong>Supporting architecture.</strong>
 - <em>IPs.</em> At about 2.2 million emails a month, MGA is below the volume that triggers automatic dedicated IPs. Early dedicated IPs go through the Account Executive.
 - <em>Shared reputation.</em> IPs are assigned at the org level and route by message purpose (promotional or transactional), not by brand. MGA accepts one shared sending reputation across brands (G0602), or `` reopens.
@@ -676,7 +686,17 @@
 <tr>
 <td>MGA not ready to build warm-up emails</td>
 <td>E06</td>
-<td>E06 is on the critical path; a late start moves go-live (G0608)</td>
+<td>Warm-up starts late; in the AI lanes that moves go-live (G0608)</td>
+</tr>
+<tr>
+<td>Daily unsubscribe delta missed</td>
+<td>E06, E17</td>
+<td>Mail goes to people who opted out in Klaviyo; complaints of 0.1% can cause blocking (G0610)</td>
+</tr>
+<tr>
+<td>Per-subscriber Klaviyo unsubscribe link</td>
+<td>E06</td>
+<td>If MC Next can't build it, body unsubscribes land in MC Next and the delta runs both ways (G0609)</td>
 </tr>
 <tr>
 <td>Carrier approval late</td>
@@ -692,7 +712,7 @@
 </table>
 <h2>Open design questions for Phase 0</h2>
 <p>These are the 🔴 forks with no grounding source in Salesforce scope: G0504 (Shopify consent after cutover), G1102 (paid-media consent) and G0402 (suppression import). The identity thresholds (G0101, G0102) and per-flow timing (G0702) also go into Phase 0. The full list is on the scope page.</p></div></section><section id="delivery" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Delivery plan</h2><div class="sz-doc"><h1>MGA Entertainment: Delivery Plan (Reduced Scope)</h1>
-<p><strong>Klaviyo to Marketing Cloud Next and Data 360</strong> · 2026-10-14 · Status: draft for solution-lead review</p>
+<p><strong>Klaviyo to Marketing Cloud Next and Data 360</strong> · 2026-10-15 · Status: draft for solution-lead review</p>
 <p><strong>Total program duration: 25 weeks (per user commitment).</strong> Wall-clock elapsed, Phase 0 through hypercare exit, including MGA review and sign-off time. The Solution Lead committed 25 weeks inside the benchmark-based range of 14–30 weeks (top-down from engagement shape: Multi-Cloud + Data Integration / Medium, 16–24 weeks, widened for regulated data and assumption density).</p>
 <blockquote>
 <p><em>This figure is benchmark-based, derived from the AI model's training data and general delivery patterns (not Salesforce-validated) — not a commitment. Final figures are confirmed through the applicable commercial agreement.</em></p>
@@ -701,7 +721,7 @@
 <p><strong>How the range was built</strong>
 - <strong>Baseline 16–24 weeks.</strong> Seventeen epics (3 L, 4 M, 8 S, 1 XS, no XL) across Marketing Cloud Next (MC Next) and Data 360 match the Multi-Cloud + Data Integration / Medium row.
 - <strong>+15% for regulated data.</strong> GDPR consent evidence and audit trail, plus COPPA, apply (E05).
-- <strong>±10% for confidence.</strong> 27 of 98 open items are working assumptions, and seven epics carry a larger size if one breaks.</p>
+- <strong>±10% for confidence.</strong> 28 of 100 open items are working assumptions, and seven epics carry a larger size if one breaks.</p>
 <p><strong>What sets the high end</strong>
 - <strong>E02, Shopify integration.</strong> The connector is in beta. A fallback to a custom Ingestion API build would push E02 to XL. <em>Tighten with:</em> MGA's decision on the Beta Services Terms and a fallback date (G0201).
 - <strong>E01, unified profile.</strong> Volumes and identity rules are unknown. <em>Tighten with:</em> identifiers per source and record counts per Klaviyo account (G0101, G0103).
@@ -709,11 +729,11 @@
 <p><strong>Against the client target.</strong> MGA's March 1, 2027 date is about 20 weeks from today, before contracting and Phase 0. The 25-week plan lands about five weeks or more past it. MGA can extend Klaviyo month to month if launch slips (G1401), so March 1 is a target, not a hard deadline. Klaviyo can only be switched off once MGA's own 31 flows are live too.</p>
 <hr />
 <h2>Phases</h2>
-<p>Phases run in sequence, with one parallel track. Phase 0 (3 weeks), testing and cutover (2 weeks) and hypercare (2 weeks) were set by the Solution Lead; the remaining 18 weeks are split across the build phases by T-shirt points. Two pieces of work are paced by outside parties and don't compress in any delivery lane: SMS short-code approval (carriers, 12 weeks) and domain warm-up (mailbox providers, six weeks).</p>
+<p>Phases run in sequence, with one parallel track. Phase 0 (3 weeks), testing and cutover (2 weeks) and hypercare (2 weeks) were set by the Solution Lead; the remaining 18 weeks are split across the build phases by T-shirt points. Two pieces of work are paced by outside parties and don't compress in any delivery lane: SMS short-code approval (carriers, 12 weeks) and domain warm-up (mailbox providers, six weeks). Warm-up starts with the Klaviyo consent import at the end of Phase 2 and runs into Phase 3 (ADR 0003), so in this plan it fits inside the build and no longer sets the length of Phase 3.</p>
 <h3>Phase 0: Design (3 weeks, weeks 1–3)</h3>
 <ul>
 <li><strong>Settles:</strong> the open design decisions (Shopify consent after cutover G0504, paid-media consent G1102, suppression import G0402), identity rules, partner file specs, specs for the 8 Salesforce flows, and the copy hand-off plan.</li>
-<li><strong>Starts:</strong> SMS short-code registration for 3 brands (E16, parallel track). MGA's marketing users take self-paced Marketing Cloud Next learning, so they're ready to build the warm-up emails in E06 and their own flows in Phase 3.</li>
+<li><strong>Starts:</strong> SMS short-code registration for 3 brands (E16, parallel track). MGA's marketing users take self-paced Marketing Cloud Next learning, so they're ready to build the warm-up emails in E06 (needed by about week 12) and their own flows in Phase 3.</li>
 <li><strong>Learns:</strong> holiday code-freeze dates (G1402), the beta-connector fallback date (G0201), MGA's cutover approach (all brands or brand by brand), and who on MGA's side builds the 31 MGA flows.</li>
 <li><strong>Done when:</strong> decisions logged and signed off by MGA; registration submitted; self-paced learning complete.</li>
 </ul>
@@ -727,19 +747,21 @@
 <ul>
 <li><strong>E02</strong> Shopify connector (3 stores) and Interactions SDK (3 storefronts) · <strong>E03</strong> partner files from MGA's Azure container · <strong>E04</strong> Klaviyo contacts, contact points, suppressions and Yotpo members. These three start together once E01 is done.</li>
 <li>Then <strong>E05</strong> brand subscriptions, preference center and privacy, once E02, E03 and E04 are all done.</li>
-<li>Then <strong>E17</strong> Klaviyo consent import into those subscriptions, before Shopify consent is mapped (load order G0407).</li>
+<li>Then <strong>E17</strong> Klaviyo consent import into those subscriptions, before Shopify consent is mapped (load order G0407). The first load is the engaged group, so warm-up can start on it.</li>
+<li><strong>E06</strong> email deliverability, setup and warm-up start: sender profiles and authentication for 3 domains, then warm-up from E17's first load, on emails MGA builds (G0608). From here until warm-up ends, Klaviyo unsubscribes load into Data 360 every day (G0610). We recommend the unsubscribe link in the body of warm-up emails points to the brand's Klaviyo page (G0609); the inbox one-click unsubscribe is handled by MC Next.</li>
 <li><strong>Identity on:</strong> once every source is imported, the identity ruleset is turned on for its first full run, and match thresholds are tuned with MGA on the full data before Phase 3.</li>
-<li><strong>Done when:</strong> all sources ingest on schedule; unified profiles resolve on the full data; the trial migration reconciles; subscriptions and the preference center work in the build sandbox; Klaviyo consent is imported and reconciled.</li>
-<li>Depends on: E01. MGA's web team deploys the SDK; MGA and vendors drop the partner files.</li>
+<li><strong>Done when:</strong> all sources ingest on schedule; unified profiles resolve on the full data; the trial migration reconciles; subscriptions and the preference center work in the build sandbox; the engaged group's Klaviyo consent is imported and reconciled; domains are authenticated and warm-up has started.</li>
+<li>Depends on: E01; E04 and E05 (E06). MGA's web team deploys the SDK; MGA and vendors drop the partner files; MGA builds the warm-up emails.</li>
 </ul>
 <h3>Phase 3: Deliverability and Journeys (7 weeks, weeks 15–21)</h3>
 <ul>
-<li><strong>E06</strong> email deliverability: sender profiles, authentication and warm-up for 3 domains, with MGA building the warm-up emails. Warm-up takes six weeks and sets the floor for this phase.</li>
-<li><strong>E07</strong> 3 abandoned-cart flows · <strong>E08</strong> 3 welcome drips · <strong>E09</strong> 2 loyalty program welcome emails. Each flow gets its own calculated insight and entry audience. They start with E06 and can't finish before it.</li>
+<li><strong>E06</strong> warm-up continues (six weeks in total, started late in Phase 2), with the daily Klaviyo unsubscribe delta.</li>
+<li><strong>E17</strong> full refresh: when warm-up is complete, one full Klaviyo consent refresh loads into Data 360. An opt-out in either system wins, so no one who unsubscribed in MC Next is re-subscribed.</li>
+<li><strong>E07</strong> 3 abandoned-cart flows · <strong>E08</strong> 3 welcome drips · <strong>E09</strong> 2 loyalty program welcome emails. Each flow gets its own calculated insight and entry audience. They can't finish before warm-up does.</li>
 <li><strong>E11</strong> segments and 6 paid-media activations, then <strong>E12</strong> Agentforce campaign brief and segment creation.</li>
 <li><strong>E18</strong> MGA flow-build enablement: one reference build each of a calculated insight, an audience and a flow, a flow-build playbook, and working sessions with MGA's builders.</li>
-<li><strong>Done when:</strong> domains are authenticated and warmed up; the 8 flows are built and tested per brand with MGA copy loaded; activations run in the sandbox; Agentforce actions run with brand guardrails; the playbook and reference builds are handed to MGA.</li>
-<li>Depends on: E05 (E06, E11); E16 approval at week 12 (E07–E09); E02, E10 (flows); E03 (loyalty); E11 (Agentforce); E07–E09 (E18 reference builds).</li>
+<li><strong>Done when:</strong> warm-up is complete and the full Klaviyo refresh is reconciled; the 8 flows are built and tested per brand with MGA copy loaded; activations run in the sandbox; Agentforce actions run with brand guardrails; the playbook and reference builds are handed to MGA.</li>
+<li>Depends on: E06 warm-up and E17 (refresh); E05 (E11); E16 approval at week 12 (E07–E09); E02, E10 (flows); E03 (loyalty); E11 (Agentforce); E07–E09 (E18 reference builds).</li>
 </ul>
 <h3>Phase 4: Testing and Cutover (2 weeks, weeks 22–23)</h3>
 <ul>
@@ -757,7 +779,7 @@
 <ul>
 <li><strong>E16</strong>: carrier approval of 3 short codes, submitted in Phase 0. Must be approved before Phase 3 starts.</li>
 </ul>
-<p><strong>Critical path:</strong> E01 → E02 / E03 / E04 → E05 → E06 (with E07–E09) → E14 → E15. Slippage on any one cascades. E16 isn't on the path at 12 weeks, but a carrier delay past week 14 pushes Phase 3. The SDK deployment inside E02 sits with MGA's web team during the holiday peak. Klaviyo switch-off also depends on MGA finishing its own flows, which sits outside this plan.</p>
+<p><strong>Critical path:</strong> E01 → E02 / E03 / E04 → E05 → E17 / E06 warm-up → E07–E09 → E14 → E15. Slippage on any one cascades. E16 isn't on the path at 12 weeks, but a carrier delay past week 14 pushes Phase 3. The SDK deployment inside E02 sits with MGA's web team during the holiday peak. Klaviyo switch-off also depends on MGA finishing its own flows, which sits outside this plan.</p>
 <hr />
 <h2>Standard processes (all phases)</h2>
 <ul>
@@ -804,9 +826,21 @@
 </tr>
 <tr>
 <td>MGA not ready to build warm-up emails (G0608)</td>
-<td>3</td>
-<td>E06 is on the critical path; go-live moves</td>
-<td>Self-paced learning done in Phase 0; content owner named before Phase 3</td>
+<td>2</td>
+<td>Warm-up starts late; in the AI lanes it moves go-live</td>
+<td>Self-paced learning done in Phase 0; content owner named in Phase 1</td>
+</tr>
+<tr>
+<td>Daily Klaviyo unsubscribe delta missed during warm-up (G0610)</td>
+<td>2–3</td>
+<td>Mail sent to people who opted out; complaints and blocking</td>
+<td>Named owner and daily check; opt-out wins on the full refresh</td>
+</tr>
+<tr>
+<td>MC Next can't build a per-subscriber Klaviyo unsubscribe link (G0609)</td>
+<td>2</td>
+<td>Body unsubscribes land in MC Next instead</td>
+<td>Confirm in Phase 0; fallback is the daily delta in both directions</td>
 </tr>
 <tr>
 <td>Carrier approval late (E16)</td>
@@ -1027,6 +1061,32 @@
 <li>"Questions for MGA Entertainment" (10/13/26): Snapser "parent-consent data"; business-unit question referencing France and Italy.</li>
 <li>Marketing Cloud Next consent model: consent is held per contact point and checked at send time.</li>
 <li>Privacy Requests delete records across the org and Data 360. Privacy Center supports GDPR access, portability, and erasure.</li>
+</ul></div><div class="sz-doc"><h1>0003 — Domain warm-up starts with the Klaviyo consent import; Klaviyo holds unsubscribes until warm-up ends</h1>
+<p><strong>Date:</strong> 2026-10-15 · <strong>Status:</strong> accepted (the per-subscriber Klaviyo link is an assumption to confirm, G0609) · <strong>Source:</strong> Solution Lead direction</p>
+<h2>Context</h2>
+<p>Domain warm-up for MGA's 3 sending domains (E06) takes about six weeks, paced by the mailbox providers. Until now it started after consent was complete and ran in the first six weeks of Phase 3, so in the AI-native lane it set the Phase 3 floor. Warm-up can't start on an empty audience: Marketing Cloud Next treats a contact point with no consent value as opted out, and hard bounces and complaints must be suppressed before a new domain sends. Klaviyo keeps sending through the holiday peak and stays live until cutover, so during warm-up subscribers exist in both systems.</p>
+<h2>Decision</h2>
+<ol>
+<li><strong>Warm-up starts with E17.</strong> Domain authentication and sender profiles are set up in Phase 2. Warm-up starts as soon as E17's first load (the engaged group, with suppressions already loaded by E04) is in, at the end of Phase 2, and runs into Phase 3.</li>
+<li><strong>Body unsubscribe links point to Klaviyo during warm-up.</strong> We recommend MGA keep Klaviyo as the main record of unsubscribes until warm-up ends: the unsubscribe link in the body of MC Next warm-up emails goes to the brand's Klaviyo unsubscribe page.</li>
+<li><strong>A daily delta, not only a final load.</strong> Gmail and Yahoo show their own one-click unsubscribe, which MC Next processes itself, and they expect unsubscribes processed within two days. So Klaviyo unsubscribes are loaded into Data 360 every day for the whole warm-up.</li>
+<li><strong>One full refresh after warm-up, opt-out wins.</strong> When warm-up is complete, one full Klaviyo consent refresh loads into Data 360. An opt-out recorded in either system wins, so the refresh never re-subscribes someone who opted out in MC Next.</li>
+</ol>
+<h2>Consequences</h2>
+<ul>
+<li>E06 moves to Phase 2 in the roadmap (setup and warm-up start); E07–E09 still can't finish before warm-up does.</li>
+<li>E17 now loads in three steps (engaged group, daily delta, full refresh). It stays size S.</li>
+<li>Traditional holds at 25 weeks (3/4/7/7/2/2); Phase 3 is set by build effort, so warm-up becomes buffer. Augmented holds at 23 weeks. AI-native goes from 22 to 21 weeks (3/3/6/5/2/2), 4,250 PS hours, because warm-up no longer sets its Phase 3 floor. SMS approval at week 12 still holds Phase 3 start at week 13 in every lane.</li>
+<li>New dependency on MGA: warm-up emails built by the time E17's first load lands (G0608).</li>
+<li>New risks: the per-subscriber Klaviyo link (G0609) and a missed daily delta (G0610).</li>
+</ul>
+<h2>Grounds</h2>
+<ul>
+<li>Solution Lead direction, 2026-10-15: run warm-up emails at the same time as E17; point unsubscribe links to Klaviyo; one Klaviyo consent update into Data 360 after warm-up. Adjusted (agreed the same day) to add the daily delta and the opt-out-wins rule.</li>
+<li>Records with no consent value are treated as opted out.</li>
+<li>Hard bounces and complaints damage sender reputation; complaints of 0.1% can cause blocking.</li>
+<li>Warm-up starts with the most engaged recipients.</li>
+<li>Internal Salesforce engineering notes (Marketing Cloud one-click unsubscribe header; Gmail and Yahoo bulk-sender requirements): inbox one-click unsubscribes are processed by the sending platform, with a two-day processing expectation. Not a public KA; confirm against current MC Next documentation.</li>
 </ul></div></section>
 <hr class="sz-divider">
 <p class="sz-note">Prepared by Salesforce Professional Services · October 2026 · Pricing not included.</p>
